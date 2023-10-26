@@ -1,5 +1,5 @@
 
-
+# class for BGA Algo
 
 class BGA:
     def __init__(self, optimization_function, parameters_number, population, 
