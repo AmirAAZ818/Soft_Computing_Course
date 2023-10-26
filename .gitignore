@@ -1,0 +1,3 @@
+# ignoring .idea folder that is for Pycharm IDE
+
+/.idea/
