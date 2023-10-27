@@ -84,7 +84,26 @@ def fitness_function(chromosome):
     return fitness
 #----------------------------------------------------------------------------
 
-def f(x1, x2):
-    value = (1 + cos(2 * pi * x1 * x2)) * exp(- (abs(x1) + abs(x2)) / 2)
+def f(chro1, chro2):
+    value = (1 + cos(2 * pi * chro1 * chro2)) * exp(- (abs(chro1) + abs(chro2)) / 2)
     return value
 #--------------------------------------------------------------------------
+def f(chromosome):
+    x = chromosome[0]
+    y = chromosome[1]
+    z = chromosome[2]
+    w = chromosome[3]
+    obj = x * sin(y) + y * cos(z) + z * sin(w) + w * cos(x)
+    penalty = 0
+    # check if any constraint is violated and add a penalty accordingly
+    if x + y + z + w > 10:
+        penalty += (x + y + z + w - 10)**2
+    if x - z < 0:
+        penalty += (x - z)**2
+    if y - w < 0:
+        penalty += (y - w)**2
+    if x < 0 or y < 0 or z < 0 or w < 0:
+        penalty += (x**2 + y**2 + z**2 + w**2)
+    # fitness score is the objective function value minus the penalty term
+    fitness = obj - penalty
+    return fitness
