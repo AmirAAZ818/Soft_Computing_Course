@@ -1,4 +1,4 @@
-import sin,pi from math
+from math import sin, pi
 
 def michalewicz(x):
     m = 10
