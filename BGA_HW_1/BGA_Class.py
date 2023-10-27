@@ -33,3 +33,7 @@ class BGA:
             j = randint(0,self.Choromosom_Len-1)
             child_matrix[i,j] = not child_matrix[i,j]
             return
+        
+    
+    def Get_Fitness_Value(self,fitfunct,choro):
+        return fitfunct(choro)
