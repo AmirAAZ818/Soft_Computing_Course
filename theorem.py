@@ -1,4 +1,4 @@
-from math import cos, sqrt,sin,pi,prod
+from math import cos,sqrt,sin,pi,prod,exp
 #-------------------------------------------------------------------------
 # The two Demensional Griewank's function
 
@@ -38,3 +38,53 @@ def rosenbrock(x, y):
     b = 100
     return (a - x) ** 2 + b * (y - x ** 2) ** 2
 #--------------------------------------------------------
+def fitness_function(chromosome):
+    
+    x = chromosome[0]
+    y = chromosome[1]
+    z = chromosome[2]
+    fitness = - (x**2 + y**2 + z**2)
+    return fitness
+#---------------------------------------------------------
+def fitness_function(chromosome):
+    
+    x = chromosome[0]
+    y = chromosome[1]
+    z = chromosome[2]
+    fitness = math.sin(x) + math.cos(y) + math.tan(z)
+    return fitness
+#------------------------------------------------------
+def fitness_function(chromosome):
+    
+    x = chromosome[0]
+    y = chromosome[1]
+    z = chromosome[2]
+    fitness = math.sin(x) + math.cos(y) + math.tan(z)
+    return fitness
+#-------------------------------------------------------
+
+def fitness_function(chromosome):
+    
+    x = chromosome[0]
+    y = chromosome[1]
+    z = chromosome[2]
+    # objective function value
+    obj = x * math.sin(y) + y * math.cos(z) + z * math.sin(x)
+    # penalty term
+    penalty = 0
+    # check if any constraint is violated and add a penalty accordingly
+    if x + y > 10:
+        penalty += (x + y - 10)**2
+    if x - z < 0:
+        penalty += (x - z)**2
+    if x < 0 or y < 0 or z < 0:
+        penalty += (x**2 + y**2 + z**2)
+    # fitness score is the objective function value minus the penalty term
+    fitness = obj - penalty
+    return fitness
+#----------------------------------------------------------------------------
+
+def f(x1, x2):
+    value = (1 + cos(2 * pi * x1 * x2)) * exp(- (abs(x1) + abs(x2)) / 2)
+    return value
+#--------------------------------------------------------------------------
