@@ -4,8 +4,8 @@ from random import randint, random
 # class for BGA Algo
 
 class BGA:
-    def __init__(self, target_function, function_dim, population,
-                 crossover_rate, mutation_rate, chromosome_bits=8):
+    def __init__(self, max_gen, target_function, function_dim, population,
+                 crossover_rate, mutation_rate, precision, chromosome_bits=8, ):
 
         self.population_matrix = None
         self.function = target_function  # تابع هدف
@@ -14,8 +14,10 @@ class BGA:
         self.chromosome_len = chromosome_bits
         self.pc = crossover_rate
         self.pm = mutation_rate
+        self.max_gen = max_gen  # maximum number of generations
+        self.precision = precision  # quantization error
 
-    def Random_Chromosome(self):
+    def Random_population(self):
         population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
 
         for i in range(self.population):
@@ -25,47 +27,43 @@ class BGA:
             population_matrix.append(chromosome)
 
         self.population_matrix = population_matrix
-        
-    
+
+    def
+
     def Crossover(self, parent_matrix):
         child_matrix = []
         i = 0
-        while i < self.population: 
-            if random() > self.pc :
+        while i < self.population:
+            if random() > self.pc:
                 child_matrix.append(parent_matrix[i])
-                child_matrix.append(parent_matrix[i+1])
+                child_matrix.append(parent_matrix[i + 1])
             else:
                 point = randint(0, self.chromosome_len)
                 child1 = parent_matrix[i]
-                child1[point, -1] = parent_matrix[i+1][point, -1]
-                child2 = parent_matrix[i+1]
+                child1[point, -1] = parent_matrix[i + 1][point, -1]
+                child2 = parent_matrix[i + 1]
                 child2[point, -1] = parent_matrix[i][point, -1]
             i += 2
         self.Child_matrix = child_matrix
-
-
 
     def Mutation(self, child_matrix):
         rand = random()
         if rand > self.pm:
             return
         else:
-            i = randint(0, self.population-1)
+            i = randint(0, self.population - 1)
             j = randint(0, self.chromosome_len - 1)
             child_matrix[i, j] = not child_matrix[i, j]
             return
-        
 
-    def Get_Fitness_Value(self,fitfunct,choro):
+    def Get_Fitness_Value(self, fitfunct, choro):
         return fitfunct
-
-
-
 
 
 def main():
     # just for testing
-    bga1 = BGA(target_function=lambda x: x ** 2, function_dim=2, population=10, crossover_rate=0.8, mutation_rate=0.2,
+    bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=10, crossover_rate=0.8,
+               mutation_rate=0.2,
                chromosome_bits=8)
     bga1.Random_Chromosome()
     print(bga1.population_matrix)
