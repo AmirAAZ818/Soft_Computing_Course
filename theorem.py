@@ -107,3 +107,49 @@ def f(chromosome):
     # fitness score is the objective function value minus the penalty term
     fitness = obj - penalty
     return fitness
+#----------------------------------------------------------------------------------
+# Booth function
+
+def booth(x):
+    return (x[0] + 2 * x[1] - 7)**2 + (2 * x[0] + x[1] - 5)**2
+#----------------------------------------------------------------
+# Bukin function N.6
+
+def bukin_n6(x):
+    return 100 * np.sqrt(np.abs(x[1] - 0.01*x[0]**2)) + 0.01*np.abs(x[0] + 10)
+#-------------------------------------------------------------------------------
+# Cross-in-Italy function
+
+def cross_in_italy(x):
+    return -0.0001 * (np.abs(np.sin(x[0]) * np.sin(x[1]) * np.exp(np.abs(100 - np.sqrt(x[0]**2 + x[1]**2)/np.pi))) + 1)
+#-----------------------------------------------------------------------------------------------------------------------------
+# Holder table function
+
+def holder_table(x):
+    num = -np.abs(np.sin(x[0]) * np.cos(x[1]) * np.exp(np.abs(1 - np.sqrt(x[0]**2 + x[1]**2)/np.pi))
+                  * np.exp(np.abs(1 - np.sqrt(x[0]**2 + x[1]**2)/np.pi)))
+    den = 1 + np.abs(x[0] + x[1]) * np.exp(np.abs(1 - np.sqrt(x[0]**2 + x[1]**2)/np.pi))
+    return num / den
+#----------------------------------------------------------------------------------------------------
+# McComick function
+
+def mccormick(x):
+    return np.sin(x[0] + x[1]) + (x[0] - x[1])**2 - 1.5*x[0] + 2.5*x[1] + 1
+#-----------------------------------------------------------------------------
+# Schaffer function N.1
+
+def schaffer_n1(x):
+    return x**2
+#------------------------------
+# Schaffer function N.2
+
+def schaffer_n2(x):
+    return x**2
+#------------------------------
+# Poloni's two objective function
+
+def polonis_two_objective(x):
+    f1 = (1 - np.exp(-(x[0]-1)**2 - (x[1]+1)**2)) / 0.45
+    f2 = (2.0 * (x[0]-0.5)**2 + 2.0 * (x[1]-0.5)**2)
+    return f1, f2
+#-----------------------------------------------------------
