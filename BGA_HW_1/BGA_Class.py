@@ -23,6 +23,8 @@ class BGA:
     def Run(self):
         self.get_len_chro()  # estimating the number of bits for each dimension.
         self.Random_population()  # Making random population
+        print(self.decode_chromosomes())
+        print(len(self.decode_chromosomes()))
 
     def Random_population(self):
         population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
@@ -52,6 +54,42 @@ class BGA:
             var_bit_len(boundaries[var_idx], var_idx)
 
         self.chromosome_len = sum(self.L)
+
+    def decode_chromosomes(self):  # returns a tuple of tuples of the decoded value for variables, size: N x dim
+        def binary_to_decimal(
+                binary_num):  # binary_num is a list of 0s and 1s. we join it and make it string, and then we convert it using a special way in python
+            b_num = list(map(str, binary_num))
+            return int(''.join(b_num), 2)
+
+        def decode_chromosome(
+                chromosome):  # returns a tuple containing the real values of the genes for a given chromosome
+            rng = 0
+            decoded_chromosome = []
+            for gene_idx, length in enumerate(self.L):
+                # converting from binary to decimal
+                new_rng = rng + length
+
+                x_i = chromosome[rng:new_rng]  # slice of the list that contains the gene bits
+                decoded_gene = binary_to_decimal(x_i)  # decoded_gene = decoded binary number
+
+                # normalizing the decoded gene value
+                no_decoded_gene = decoded_gene / ((2 ** length) - 1)
+
+                # next step (don't know it in english :) )
+                config = self.func_config[gene_idx]  # assigning the boundary of the gene to a variable called config
+                x_real = config["low"] + ((config['high'] - config['low']) * no_decoded_gene)
+
+                decoded_chromosome.append(x_real)
+
+                rng = new_rng
+            return tuple(decoded_chromosome)
+
+        # giving each chromosome to the decode_chromosome function and adding it in a list
+        decoded_values = []  # this will be converted to a tuple at the end
+        for chromosome in self.population_matrix:
+            decoded_values.append(decode_chromosome(chromosome))
+
+        return tuple(decoded_values)
 
     def Crossover(self, parent_matrix):
         child_matrix = []
@@ -86,10 +124,12 @@ class BGA:
 def main():
     # just for testing
     bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=10, crossover_rate=0.8,
-               mutation_rate=0.2, max_gen=50, precision=0.1, function_config=[{'low': 2, 'high': 5}, {'low': -6, 'high': 0}])
-    # print(bga1.population_matrix)
+               mutation_rate=0.2, max_gen=50, precision=0.1,
+               function_config=[{'low': 2, 'high': 5}, {'low': -6, 'high': 0}])
+
+    print(bga1.population_matrix)
     #
-    # bga1.Run()
+    bga1.Run()
     #
     # print(bga1.population_matrix)
     # print(bga1.L)
