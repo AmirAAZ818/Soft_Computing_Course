@@ -14,6 +14,7 @@ class BGA:
         self.pm = mutation_rate
 
 
+<<<<<<< Updated upstream
     def Random_Choromosom(self):
         population_matrix = []
         for i in range(self.Population):
@@ -41,6 +42,8 @@ class BGA:
         self.Child_matrix = child_matrix
 
 
+=======
+>>>>>>> Stashed changes
     def Mutation(self, child_matrix):
         rand = random()
         if rand > self.pm :
