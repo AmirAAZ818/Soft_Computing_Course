@@ -1,10 +1,13 @@
 from random import randint, random
+
+
 import math
 
 
-# class for BGA Algo
+
 
 class BGA:
+
     def __init__(self, max_gen, target_function, fitness_function, function_dim, population,
                  crossover_rate, mutation_rate, precision, function_config):
 
