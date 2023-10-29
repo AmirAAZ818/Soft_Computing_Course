@@ -166,7 +166,7 @@ def main():
     # just for testing
     bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=5, crossover_rate=0.8,
                mutation_rate=0.2, max_gen=50, precision=0.1,
-               function_config=[{'low': 2, 'high': 8}, {'low': -6, 'high': 0}])
+               function_config=[{'low': 2, 'high': 8}, {'low': -6, 'high': 0}], fitness_function=lambda x, y: x ** 2 + y ** 2)
 
     # print(bga1.population_matrix)
     #
