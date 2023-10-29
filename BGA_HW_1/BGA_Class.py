@@ -1,7 +1,7 @@
 from random import randint, random
 import theorem
 import math
-
+import matplotlib.pyplot as plt
 
 class BGA:
 
@@ -18,6 +18,7 @@ class BGA:
         self.pc = crossover_rate
         self.pm = mutation_rate
         self.max_gen = max_gen  # maximum number of generations
+        self.last_gen = 0
         self.precision = precision  # quantization error
         self.L = [0 for i in range(self.dim)]
         self.history = {"avg_fitness": [], "best_so_far": []}
@@ -201,6 +202,29 @@ class BGA:
             fitness_values[i] = self.fit_func(chromosome)
 
         return tuple(fitness_values)
+
+    def plot_info(self):
+
+        fig, axis = plt.subplots(1, 2)
+
+        # Plot of avg fitness
+        y = self.history['avg_fitness']
+        x = list(range(self.last_gen))
+        axis[0, 0].plot(x, y, label="Average Fitness", color="blue")
+
+        # Plot of the best fitness so far
+        y = self.history['best_so_far']
+        x = list(range(self.last_gen))
+        axis[0, 0].plot(x, y, label="Best So Far", color="blue")
+
+        plt.savefig(r"Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
+
+        plt.legend()
+        plt.show()
+
+
+
+
 
 
 def main():
