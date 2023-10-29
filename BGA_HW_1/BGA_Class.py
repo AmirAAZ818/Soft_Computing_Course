@@ -125,30 +125,47 @@ class BGA:
 
         return tuple(decoded_values)
 
-    def Crossover(self, parent_matrix):
+    def Crossover(self, parent_matrix): #input: selected choros for parents / output: a matrix of childs
+        # this function gets parent matrix(selected parents for making child)
+        # and after cross over sets child_matrix atribute
         child_matrix = []
         i = 0
-        while i < self.population:
+        while i < self.population -1:
             if random() > self.pc:
                 child_matrix.append(parent_matrix[i])
                 child_matrix.append(parent_matrix[i + 1])
+                i += 2
             else:
                 point = randint(0, self.chromosome_len)
+                print(point)
                 child1 = parent_matrix[i]
-                child1[point, -1] = parent_matrix[i + 1][point, -1]
-                child2 = parent_matrix[i + 1]
-                child2[point, -1] = parent_matrix[i][point, -1]
-            i += 2
+                child2 = parent_matrix[i+1]
+                for j in range(point, self.chromosome_len):
+                    child2[j] = parent_matrix[i][j]
+                    child1[j] = parent_matrix[i+1][j]
+                    
+                child_matrix.append(child1)
+                child_matrix.append(child2)
+                i += 2
+
         self.Child_matrix = child_matrix
 
-    def Mutation(self, child_matrix):
+
+    def Mutation(self, child_matrix): # input : a matrix of childs from cross over stage / output: child matrix
+        # this function gets a matrix of childs, this matrix is output of cross over stage
+        # if rand is less than pm, changes 1 bit of one random choromosom 
         rand = random()
+        print(rand)
         if rand > self.pm:
             return
         else:
             i = randint(0, self.population - 1)
             j = randint(0, self.chromosome_len - 1)
-            child_matrix[i, j] = not child_matrix[i, j]
+            print(i,j)
+            if child_matrix[i][j] == 1:
+                child_matrix[i][j] = 0
+            else:
+                child_matrix[i][j] = 1
             return
 
     def get_Fitness(self,
@@ -164,17 +181,28 @@ class BGA:
 
 def main():
     # just for testing
-    bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=5, crossover_rate=0.8,
+    bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=4, crossover_rate=0.8,
                mutation_rate=0.2, max_gen=50, precision=0.1,
                function_config=[{'low': 2, 'high': 8}, {'low': -6, 'high': 0}], fitness_function=lambda x, y: x ** 2 + y ** 2)
 
     # print(bga1.population_matrix)
     #
-    bga1.Run()
+    # bga1.Run()
     #
     # print(bga1.population_matrix)
     # print(bga1.L)
     # print(bga1.chromosome_len)
+    bga1.get_len_chro()
+    bga1.Random_population()
+    print(bga1.population_matrix)
+    print('-----------------------')
+    bga1.Crossover(bga1.population_matrix)
+    print(bga1.Child_matrix)
+    print('-----------------')
+    bga1.Mutation(bga1.Child_matrix)
+    print(bga1.Child_matrix)
+    
+
 
 
 if __name__ == "__main__":
