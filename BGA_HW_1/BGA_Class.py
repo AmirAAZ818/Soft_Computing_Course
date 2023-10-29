@@ -5,12 +5,13 @@ import math
 # class for BGA Algo
 
 class BGA:
-    def __init__(self, max_gen, target_function, function_dim, population,
+    def __init__(self, max_gen, target_function, fitness_function, function_dim, population,
                  crossover_rate, mutation_rate, precision, function_config):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
         self.function = target_function  # تابع هدف
+        self.fit_func = fitness_function  # the fitness function
         self.dim = function_dim  # تعداد پارامترهای تابع
         self.population = population  # اندازه جمعیت
         self.chromosome_len = 0
@@ -29,9 +30,13 @@ class BGA:
         print("L is _______")
         print(self.L)
         print("decoding phase in Run _____________________________________________")
-        mat = self.decode_chromosomes()
+        decoded_population = self.decode_chromosomes()
         print("....................")
-        print(f"decoded values are : {mat}")
+        print(f"decoded values are : {decoded_population}")
+        # Evaluating the fitness of each chromosome and the population
+        fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
+        pop_fitness = sum(fitness_values)
+        
 
     def Random_population(self):
         population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
@@ -135,8 +140,15 @@ class BGA:
             child_matrix[i, j] = not child_matrix[i, j]
             return
 
-    def Get_Fitness(self, fitfunct, choro):
-        return fitfunct(choro)
+    def get_Fitness(self,
+                    decoded_chromosomes):  # returns a tuple of size N(population), that represents the fitness value for each chromosome
+        fitness_values = [0 for i in range(self.population)]
+
+        for i in range(len(decoded_chromosomes)):
+            chromosome = decoded_chromosomes[i]
+            fitness_values[i] = self.fit_func(chromosome)
+
+        return tuple(fitness_values)
 
 
 def main():
