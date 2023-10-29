@@ -3,6 +3,7 @@ import theorem
 import math
 import matplotlib.pyplot as plt
 
+
 class BGA:
 
     def __init__(self, max_gen, target_function, fitness_function, function_dim, population,
@@ -44,8 +45,11 @@ class BGA:
 
         # Selection
         mating_pool = self.roulette_wheel(fitness_values)
+        next_gen_v1 = self.Crossover(mating_pool)
+        nex_gen =self.Mutation(next_gen_v1)
 
-    def roulette_wheel(self, fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
+    def roulette_wheel(self,
+                       fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
         sum_fitness = sum(fitness_values)
         probs = [(fitness / sum_fitness) for fitness in fitness_values]
 
@@ -70,22 +74,6 @@ class BGA:
             mating_pool.append(self.population_matrix[idx])
 
         return mating_pool
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def log(self, fitness_list):  # saves the best so far and avg fitness to log
         self.history["best_so_far"].append(max(fitness_list))
@@ -167,33 +155,33 @@ class BGA:
 
         return tuple(decoded_values)
 
-    def Crossover(self, parent_matrix): #input: selected choros for parents / output: a matrix of childs
+    def Crossover(self, mating_pool_mat):  # input: selected choros for parents / output: a matrix of childs
         # this function gets parent matrix(selected parents for making child)
-        # and after cross over sets child_matrix atribute
+        # and after cross over returns child matrix
         child_matrix = []
         i = 0
-        while i < self.population -1:
+        while i < self.population - 1:
             if random() > self.pc:
-                child_matrix.append(parent_matrix[i])
-                child_matrix.append(parent_matrix[i + 1])
+                child_matrix.append(mating_pool_mat[i])
+                child_matrix.append(mating_pool_mat[i + 1])
                 i += 2
             else:
                 point = randint(0, self.chromosome_len)
                 print(point)
-                child1 = parent_matrix[i]
-                child2 = parent_matrix[i+1]
+                child1 = mating_pool_mat[i]
+                child2 = mating_pool_mat[i + 1]
                 for j in range(point, self.chromosome_len):
-                    child2[j] = parent_matrix[i][j]
-                    child1[j] = parent_matrix[i+1][j]
-                    
+                    child2[j] = mating_pool_mat[i][j]
+                    child1[j] = mating_pool_mat[i + 1][j]
+
                 child_matrix.append(child1)
                 child_matrix.append(child2)
                 i += 2
 
-        self.Child_matrix = child_matrix
+        return child_matrix
 
 
-    def Mutation(self, child_matrix): # input : a matrix of childs from cross over stage / output: child matrix
+    def Mutation(self, child_matrix):  # input : a matrix of childs from cross over stage / output: child matrix
         # this function gets a matrix of childs, this matrix is output of cross over stage
         # if rand is less than pm, changes 1 bit of one random choromosom 
         rand = random()
@@ -203,12 +191,14 @@ class BGA:
         else:
             i = randint(0, self.population - 1)
             j = randint(0, self.chromosome_len - 1)
-            print(i,j)
+            print(i, j)
             if child_matrix[i][j] == 1:
                 child_matrix[i][j] = 0
             else:
                 child_matrix[i][j] = 1
             return
+
+        return [[0]] # todo
 
     def get_Fitness(self,
                     decoded_chromosomes):  # returns a tuple of size N(population), that represents the fitness value for each chromosome
@@ -240,34 +230,29 @@ class BGA:
         plt.show()
 
 
-
-
-
-
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=5, crossover_rate=0.8,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=6, crossover_rate=0.8,
                mutation_rate=0.2, max_gen=50, precision=0.1,
                function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}],
                fitness_function=theorem.fGriewank)
+
     # print(bga1.population_matrix)
     #
-    # bga1.Run()
+    bga1.Run()
     #
     # print(bga1.population_matrix)
     # print(bga1.L)
     # print(bga1.chromosome_len)
-    bga1.get_len_chro()
-    bga1.Random_population()
-    print(bga1.population_matrix)
-    print('-----------------------')
-    bga1.Crossover(bga1.population_matrix)
-    print(bga1.Child_matrix)
-    print('-----------------')
-    bga1.Mutation(bga1.Child_matrix)
-    print(bga1.Child_matrix)
-    
-
+    # bga1.get_len_chro()
+    # bga1.Random_population()
+    # print(bga1.population_matrix)
+    # print('-----------------------')
+    # bga1.Crossover(bga1.population_matrix)
+    # print(bga1.Child_matrix)
+    # print('-----------------')
+    # bga1.Mutation(bga1.Child_matrix)
+    # print(bga1.Child_matrix)
 
 
 if __name__ == "__main__":
