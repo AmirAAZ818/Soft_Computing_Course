@@ -36,7 +36,9 @@ class BGA:
         # Evaluating the fitness of each chromosome and the population
         fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
         pop_fitness = sum(fitness_values)
-        
+
+        # Saving the history of fitnesses for avg fitness and best so far fitness
+
 
     def Random_population(self):
         population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
