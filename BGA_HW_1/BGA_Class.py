@@ -1,10 +1,7 @@
 from random import randint, random
-
-
+import theorem
 import math
-
-
-
+import matplotlib.pyplot as plt
 
 class BGA:
 
@@ -21,10 +18,10 @@ class BGA:
         self.pc = crossover_rate
         self.pm = mutation_rate
         self.max_gen = max_gen  # maximum number of generations
+        self.last_gen = 0
         self.precision = precision  # quantization error
         self.L = [0 for i in range(self.dim)]
         self.history = {"avg_fitness": [], "best_so_far": []}
-
 
     def Run(self):
         self.get_len_chro()  # estimating the number of bits for each dimension.
@@ -35,6 +32,7 @@ class BGA:
         print("L is _______")
         print(self.L)
         print("decoding phase in Run _____________________________________________")
+        # From Here \/\/\/\/\/\/
         decoded_population = self.decode_chromosomes()
         print("....................")
         print(f"decoded values are : {decoded_population}")
@@ -44,10 +42,54 @@ class BGA:
         # Saving the history of avg fitness and best so far fitness
         self.log(fitness_values)
 
-    def log(self, fitness_list):
+        # Selection
+        mating_pool = self.roulette_wheel(fitness_values)
+
+    def roulette_wheel(self, fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
+        sum_fitness = sum(fitness_values)
+        probs = [(fitness / sum_fitness) for fitness in fitness_values]
+
+        prob = 0
+        cumulative_probs = [0 for i in range(self.population)]
+
+        for i in range(len(probs)):
+            prob += probs[i]
+            cumulative_probs[i] = prob
+
+        # Selecting N chromosomes from population matrix
+        mating_pool = []
+        for i in range(self.population):
+            r_num = random()
+            idx = 0
+
+            for j in range(len(cumulative_probs)):
+                if cumulative_probs[j] > r_num:
+                    idx = j
+                    break
+
+            mating_pool.append(self.population_matrix[idx])
+
+        return mating_pool
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def log(self, fitness_list):  # saves the best so far and avg fitness to log
         self.history["best_so_far"].append(max(fitness_list))
         self.history["avg_fitness"].append(sum(fitness_list) / len(fitness_list))
-
 
     def Random_population(self):
         population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
@@ -178,13 +220,36 @@ class BGA:
 
         return tuple(fitness_values)
 
+    def plot_info(self):
+
+        fig, axis = plt.subplots(1, 2)
+
+        # Plot of avg fitness
+        y = self.history['avg_fitness']
+        x = list(range(self.last_gen))
+        axis[0, 0].plot(x, y, label="Average Fitness", color="blue")
+
+        # Plot of the best fitness so far
+        y = self.history['best_so_far']
+        x = list(range(self.last_gen))
+        axis[0, 0].plot(x, y, label="Best So Far", color="blue")
+
+        plt.savefig(r"Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
+
+        plt.legend()
+        plt.show()
+
+
+
+
+
 
 def main():
     # just for testing
-    bga1 = BGA(target_function=lambda x, y: x ** 2 + y ** 2, function_dim=2, population=4, crossover_rate=0.8,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=5, crossover_rate=0.8,
                mutation_rate=0.2, max_gen=50, precision=0.1,
-               function_config=[{'low': 2, 'high': 8}, {'low': -6, 'high': 0}], fitness_function=lambda x, y: x ** 2 + y ** 2)
-
+               function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}],
+               fitness_function=theorem.fGriewank)
     # print(bga1.population_matrix)
     #
     # bga1.Run()

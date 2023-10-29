@@ -1,4 +1,4 @@
-Domain = [{'Griewank_2' : fGriewank , 'low' : [-600,600] , 'high' : [-600,600]},
+Domain = [{'Griewank_2' : fGriewank , 'low' : [-600,-600] , 'high' : [600,600]},
             {'Griewank' : griewank , 'low' : -600 * n , 'high' : 600 * n},
             {'Michalewicz' : michalewicz , 'low' : [0] * n , 'high' : [pi] * n},
             {'Rastrigin' : rastrigin , 'low' : [-5.12] * n , 'high'  : [5.12] * n},
