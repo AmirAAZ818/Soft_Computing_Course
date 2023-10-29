@@ -1,10 +1,10 @@
 from math import cos,sqrt,sin,pi,prod,exp,tan
 import numpy
 #-------------------------------------------------------------------------
-# The two Demensional Griewank's function
+# The two Dimensional Griewank's function
 
-def fGriewank(x, y):
-    return (x**2 + y**2) / 4000 - cos(x / sqrt(2)) * cos(y / sqrt(3)) + 1
+def fGriewank(x):
+    return (x[0]**2 + x[1]**2) / 4000 - cos(x[0] / sqrt(2)) * cos(x[1] / sqrt(3)) + 1
 #-------------------------------------------------------------------------
 # The Griewank's function
 
