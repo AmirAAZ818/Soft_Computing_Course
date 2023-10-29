@@ -23,6 +23,8 @@ class BGA:
         self.max_gen = max_gen  # maximum number of generations
         self.precision = precision  # quantization error
         self.L = [0 for i in range(self.dim)]
+        self.history = {"avg_fitness": [], "best_so_far": []}
+
 
     def Run(self):
         self.get_len_chro()  # estimating the number of bits for each dimension.
@@ -38,9 +40,13 @@ class BGA:
         print(f"decoded values are : {decoded_population}")
         # Evaluating the fitness of each chromosome and the population
         fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
-        pop_fitness = sum(fitness_values)
 
-        # Saving the history of fitnesses for avg fitness and best so far fitness
+        # Saving the history of avg fitness and best so far fitness
+        self.log(fitness_values)
+
+    def log(self, fitness_list):
+        self.history["best_so_far"].append(max(fitness_list))
+        self.history["avg_fitness"].append(sum(fitness_list) / len(fitness_list))
 
 
     def Random_population(self):
