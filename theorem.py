@@ -46,39 +46,7 @@ def fitness_function_1(chromosome):
     z = chromosome[2]
     fitness = - (x**2 + y**2 + z**2)
     return fitness
-#---------------------------------------------------------
-def fitness_function_2(chromosome):
-    
-    x = chromosome[0]
-    y = chromosome[1]
-    z = chromosome[2]
-    fitness = sin(x) + cos(y) + tan(z)
-    return fitness
-#------------------------------------------------------
-def fitness_function_3(chromosome):
-    
-    x = chromosome[0]
-    y = chromosome[1]
-    z = chromosome[2]
-    # objective function value
-    obj = x * math.sin(y) + y * math.cos(z) + z * math.sin(x)
-    # penalty term
-    penalty = 0
-    # check if any constraint is violated and add a penalty accordingly
-    if x + y > 10:
-        penalty += (x + y - 10)**2
-    if x - z < 0:
-        penalty += (x - z)**2
-    if x < 0 or y < 0 or z < 0:
-        penalty += (x**2 + y**2 + z**2)
-    # fitness score is the objective function value minus the penalty term
-    fitness = obj - penalty
-    return fitness
-#----------------------------------------------------------------------------
-def fitness_function_4(chro1, chro2):
-    value = (1 + cos(2 * pi * chro1 * chro2)) * exp(- (abs(chro1) + abs(chro2)) / 2)
-    return value
-#----------------------------------------------------------------------------------
+#-------------------------------------------
 # Booth function
 
 def booth(x):
