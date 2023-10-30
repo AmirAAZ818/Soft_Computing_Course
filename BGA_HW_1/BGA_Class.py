@@ -235,6 +235,8 @@ def main():
     # print(bga1.population_matrix)
     #
     bga1.Run()
+    for generation in range(bga1.max_gen):
+        bga1.one_gen()
     #
     # print(bga1.population_matrix)
     # print(bga1.L)
