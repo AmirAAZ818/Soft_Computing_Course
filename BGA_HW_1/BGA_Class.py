@@ -32,23 +32,23 @@ class BGA:
         print(self.population_matrix)
         print("L is _______")
         print(self.L)
-        print("decoding phase in Run _____________________________________________")
-        # From Here \/\/\/\/\/\/
+
+        for generation in range(self.max_gen):
+            print(f"________________ Generation : {generation} ________________")
+            self.one_gen()
+
+    def one_gen(self):
+
         decoded_population = self.decode_chromosomes()
-        print("....................")
-        print(f"decoded values are : {decoded_population}")
-        # Evaluating the fitness of each chromosome and the population
         fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
-
-        # Saving the history of avg fitness and best so far fitness
         self.log(fitness_values)
-
-        # Selection
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
-        print("________________ Mutation _________________")
         nex_gen = self.Mutation(next_gen_v1)
         print(f"next gen is : {nex_gen}")
+
+
+
 
 
 
@@ -103,7 +103,7 @@ class BGA:
             # we use precision and its formula to estimate bit len of the variable
             rng = boundary['high'] - boundary['low']
             length = math.ceil(math.log(rng / self.precision, 2) - 1)
-            print()
+            # print()
             self.L[idx] = length
 
         boundaries = self.func_config  # giving the config to a variable called boundaries
@@ -123,27 +123,27 @@ class BGA:
             rng = 0
             decoded_chromosome = []
             for gene_idx, length in enumerate(self.L):
-                print(f"________________________bit len of L_{gene_idx} is : {length}_____________________________")
+                # print(f"________________________bit len of L_{gene_idx} is : {length}_____________________________")
                 # converting from binary to decimal
-                print("$$$$$$$$$$$Binary to decimal phase$$$$$$$$$$$$")
+                # print("$$$$$$$$$$$Binary to decimal phase$$$$$$$$$$$$")
                 new_rng = rng + length
 
                 x_i = chromosome[rng:new_rng]  # slice of the list that contains the gene bits
-                print(f"sliced chromosome : {x_i}")
+                # print(f"sliced chromosome : {x_i}")
                 decoded_gene = binary_to_decimal(x_i)  # decoded_gene = decoded binary number
-                print(f"decimal converted gene  : {decoded_gene}")
+                # print(f"decimal converted gene  : {decoded_gene}")
 
                 # normalizing the decoded gene value
-                print("$$$$$$$ Normalizing phase $$$$$$$$")
+                # print("$$$$$$$ Normalizing phase $$$$$$$$")
                 no_decoded_gene = decoded_gene / ((2 ** length) - 1)
-                print(f"normalized gene : {no_decoded_gene}")
+                # print(f"normalized gene : {no_decoded_gene}")
 
                 # next step (don't know it in english :) )
-                print("$$$$$$$$$$ Negasht phase $$$$$$$")
+                # print("$$$$$$$$$$ Negasht phase $$$$$$$")
                 config = self.func_config[gene_idx]  # assigning the boundary of the gene to a variable called config
-                print(f"dim config is : {config}")
+                # print(f"dim config is : {config}")
                 x_real = config["low"] + ((config['high'] - config['low']) * no_decoded_gene)
-                print(f"x real is : {x_real}")
+                # print(f"x real is : {x_real}")
                 decoded_chromosome.append(x_real)
 
                 rng = new_rng
@@ -153,8 +153,8 @@ class BGA:
         # giving each chromosome to the decode_chromosome function and adding it in a list
         decoded_values = []  # this will be converted to a tuple at the end
         for chro in self.population_matrix:
-            print("_________________________________________________")
-            print(f"Current chromosome is : {chro}")
+            # print("_________________________________________________")
+            # print(f"Current chromosome is : {chro}")
             decoded_values.append(decode_chromosome(chro))
 
         return tuple(decoded_values)
@@ -171,7 +171,7 @@ class BGA:
                 i += 2
             else:
                 point = randint(0, self.chromosome_len)
-                print(point)
+                # print(point)
                 child1 = mating_pool_mat[i]
                 child2 = mating_pool_mat[i + 1]
                 for j in range(point, self.chromosome_len):
