@@ -46,7 +46,9 @@ class BGA:
         # Selection
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
-        nex_gen =self.Mutation(next_gen_v1)
+        nex_gen = self.Mutation(next_gen_v1)
+
+
 
     def roulette_wheel(self,
                        fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
@@ -181,24 +183,13 @@ class BGA:
         return child_matrix
 
 
-    def Mutation(self, child_matrix):  # input : a matrix of childs from cross over stage / output: child matrix
+    def Mutation(self, child_matrix):  # input: a matrix of childs from cross over stage / output: mutated child_matrix
         # this function gets a matrix of childs, this matrix is output of cross over stage
         # if rand is less than pm, changes 1 bit of one random choromosom 
-        rand = random()
-        print(rand)
-        if rand > self.pm:
-            return
-        else:
-            i = randint(0, self.population - 1)
-            j = randint(0, self.chromosome_len - 1)
-            print(i, j)
-            if child_matrix[i][j] == 1:
-                child_matrix[i][j] = 0
-            else:
-                child_matrix[i][j] = 1
-            return
+        mutation_mat = [[1 if random() <= self.pm else 0 for i in range(self.chromosome_len)] for j in range(self.population)]
+        mutated_matrix = [[bit1 ^ bit2 for bit1, bit2 in zip(mutation_mat[i], child_matrix[i])] for i in range(self.population)]
 
-        return [[0]] # todo
+        return mutated_matrix
 
     def get_Fitness(self,
                     decoded_chromosomes):  # returns a tuple of size N(population), that represents the fitness value for each chromosome
@@ -236,6 +227,8 @@ def main():
                mutation_rate=0.2, max_gen=50, precision=0.1,
                function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}],
                fitness_function=theorem.fGriewank)
+
+
 
     # print(bga1.population_matrix)
     #
