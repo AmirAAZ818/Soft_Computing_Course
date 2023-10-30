@@ -46,7 +46,9 @@ class BGA:
         # Selection
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
+        print("________________ Mutation _________________")
         nex_gen = self.Mutation(next_gen_v1)
+        print(f"next gen is : {nex_gen}")
 
 
 
@@ -246,6 +248,15 @@ def main():
     # print('-----------------')
     # bga1.Mutation(bga1.Child_matrix)
     # print(bga1.Child_matrix)
+    # mutation_mat = [[1 if random() <= 0.2 else 0 for i in range(10)] for j in
+    #                 range(6)]
+    # child_matrix = [[randint(0, 1) for i in range(10)] for j in range(6)]
+    # mutated_matrix = [[bit1 ^ bit2 for bit1, bit2 in zip(mutation_mat[i], child_matrix[i])] for i in
+    #                   range(6)]
+    # print(mutation_mat)
+    # print(child_matrix)
+    # print(mutated_matrix)
+
 
 
 if __name__ == "__main__":
