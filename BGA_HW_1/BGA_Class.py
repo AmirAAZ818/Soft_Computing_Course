@@ -55,6 +55,8 @@ class BGA:
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
         print(f"new gen is : {nex_gen}")
+        self.population_matrix = nex_gen
+        self.last_gen += 1
 
 
 
@@ -234,8 +236,8 @@ class BGA:
 
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=50, crossover_rate=0.8,
-               mutation_rate=0.2, max_gen=100, precision=0.1,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=200, crossover_rate=0.8,
+               mutation_rate=0.1, max_gen=200, precision=0.01,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=theorem.fGriewank)
 
