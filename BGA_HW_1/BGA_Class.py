@@ -25,10 +25,14 @@ class BGA:
         self.history = {"avg_fitness": [], "best_so_far": []}
 
     def Run(self):
+        print("BGA Is Running .....")
+        # print("_________Parameters_________")
+
+
         self.get_len_chro()  # estimating the number of bits for each dimension.
         self.Random_population()  # Making random population
         # debug
-        print("population matrix is __________")
+        print("Random Population Matrix is __________")
         print(self.population_matrix)
         print("L is _______")
         print(self.L)
@@ -36,6 +40,11 @@ class BGA:
         for generation in range(self.max_gen):
             print(f"________________ Generation : {generation} ________________")
             self.one_gen()
+
+        print("________Plotting________")
+        self.plot_info()
+
+
 
     def one_gen(self):
 
@@ -209,25 +218,25 @@ class BGA:
 
         # Plot of avg fitness
         y = self.history['avg_fitness']
-        x = list(range(self.last_gen))
-        axis[0, 0].plot(x, y, label="Average Fitness", color="blue")
+        x = list(range(self.max_gen))
+        axis[0].plot(x, y, label="Average Fitness", color="blue")
 
         # Plot of the best fitness so far
         y = self.history['best_so_far']
-        x = list(range(self.last_gen))
-        axis[0, 0].plot(x, y, label="Best So Far", color="blue")
-
-        plt.savefig(r"Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
-
+        x = list(range(self.max_gen))
+        axis[1].plot(x, y, label="Best So Far", color="blue")
         plt.legend()
         plt.show()
+        # plt.savefig(r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
+
+
 
 
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=6, crossover_rate=0.8,
-               mutation_rate=0.2, max_gen=50, precision=0.1,
-               function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}],
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=50, crossover_rate=0.8,
+               mutation_rate=0.2, max_gen=100, precision=0.1,
+               function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=theorem.fGriewank)
 
 
