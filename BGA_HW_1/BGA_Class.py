@@ -45,7 +45,7 @@ class BGA:
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
-        print(f"next gen is : {nex_gen}")
+        print(f"new gen is : {nex_gen}")
 
 
 
@@ -235,8 +235,6 @@ def main():
     # print(bga1.population_matrix)
     #
     bga1.Run()
-    for generation in range(bga1.max_gen):
-        bga1.one_gen()
     #
     # print(bga1.population_matrix)
     # print(bga1.L)
