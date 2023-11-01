@@ -23,6 +23,7 @@ class BGA:
         self.precision = precision  # quantization error
         self.L = [0 for i in range(self.dim)]
         self.history = {"avg_fitness": [], "best_so_far": []}
+        self.best_so_far = 0
 
     def Run(self):
         print("BGA Is Running .....")
@@ -91,7 +92,10 @@ class BGA:
         return mating_pool
 
     def log(self, fitness_list):  # saves the best so far and avg fitness to log
-        self.history["best_so_far"].append(max(fitness_list))
+        if self.best_so_far < max(fitness_list):
+            self.best_so_far = max(fitness_list)
+
+        self.history["best_so_far"].append(self.best_so_far)
         self.history["avg_fitness"].append(sum(fitness_list) / len(fitness_list))
 
     def Random_population(self):
@@ -211,7 +215,6 @@ class BGA:
         for i in range(len(decoded_chromosomes)):
             chromosome = decoded_chromosomes[i]
             fitness_values[i] = self.fit_func(chromosome)
-
         return tuple(fitness_values)
 
     def plot_info(self):
