@@ -3,6 +3,7 @@ import theorem
 import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from tabulate import tabulate
 
 
 class BGA:
@@ -27,21 +28,41 @@ class BGA:
         self.best_so_far = {'fitness': 0, "chromosome": list()}
         self.best_current = {'fitness': 0, "chromosome": list()}
 
-    def Run(self):
-        print("BGA Is Running .....")
-        # print("_________Parameters_________")
+    def print_parameters(self):
+        # This is a method that prints parameters in tabular structure
+        parameters = [
+            ["Population Size", self.population],
+            ["Precision", self.precision],
+            ["CrossOver Rate", self.pc],
+            ["Mutation Rate", self.pm],
+            ["Chromosome Length", self.chromosome_len],
+            ["Input Bit Length", self.L],
+            ["Max Gen", self.max_gen],
+            ["Function Input Shape", self.dim]
+        ]
+        print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
 
+    def Run(self):
+        # Starting the algo
+        print("\033[1;36;40m" + "=" * 50)
+        print("\033[1;36;40m" + "   Running Binary Genetic Algorithm   ")
+        print("\033[1;36;40m" + "=" * 50 + "\033[0m")
+
+        # First step
         self.get_len_chro()  # estimating the number of bits for each dimension.
         self.Random_population()  # Making random population
+
+        # printing the params in tabular structure
+        self.print_parameters()
 
         pbar = tqdm(range(self.max_gen), colour="green")
         for generation in pbar:
             self.one_gen()
 
             pbar.set_postfix(
-                {"Generation": generation, "Average_fitness": self.history['avg_fitness'][self.last_gen - 1],
-                 "Best Fitness ": self.best_current['fitness']})
+                {"Generation": generation})
 
+        # Showing results
         print("___________ Results ___________")
         print(f"Best So Far Chromosome :        {self.best_so_far['chromosome']}")
         print(f"Best So Far Fitness    :        {self.best_so_far['fitness']}")
@@ -49,7 +70,8 @@ class BGA:
         print(f"Best Last Fitness      :        {self.best_current['fitness']}")
         print(f"Best Last Chromosome   :        {self.best_current['chromosome']}")
         print(f"Best Last X            :        {self.decode_chromosome(self.best_current['chromosome'])}")
-        print(f"Optimum Value          :        {self.function(self.decode_chromosome(self.best_current['chromosome']))}")
+        print(
+            f"Optimum Value          :        {self.function(self.decode_chromosome(self.best_current['chromosome']))}")
 
         # plotting Results
         self.plot_info()
@@ -254,13 +276,16 @@ class BGA:
 # max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=100, crossover_rate=0.75,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=200, crossover_rate=0.85,
                mutation_rate=0.1, max_gen=100, precision=0.01,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=lambda x: 182 - theorem.fGriewank(x))
 
     # print(bga1.population_matrix)
     #
+    # print(182 - theorem.fGriewank([28, 0]))
+    # print(theorem.fGriewank([-33, -43]))
+
     bga1.Run()
     #
     # print(bga1.population_matrix)
