@@ -245,7 +245,7 @@ class BGA:
 # max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=200, crossover_rate=0.8,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=100, crossover_rate=0.75,
                mutation_rate=0.1, max_gen=100, precision=0.01,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=lambda x: 182 - theorem.fGriewank(x))
