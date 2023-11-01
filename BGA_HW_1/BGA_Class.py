@@ -45,6 +45,8 @@ class BGA:
         print(f"Best Chromosome :        {self.decode_chromosome(self.best_so_far['chromosome'])}")
         print(f"Best Fitness    :        {self.best_so_far['fitness']}")
         print(f"Average Fitness :        {self.history['avg_fitness'][self.last_gen - 1]}")
+        print(f"Optimum Value :          {self.function(self.decode_chromosome(self.best_so_far['chromosome']))}")
+
 
         # plotting Results
         self.plot_info()
@@ -62,7 +64,7 @@ class BGA:
         self.last_gen += 1
 
     def best_chromosome(self):
-        return self.best_so_far['chromosome']
+        return self.decode_chromosome(self.best_so_far['chromosome'])
 
     def roulette_wheel(self,
                        fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
@@ -247,6 +249,7 @@ def main():
                mutation_rate=0.1, max_gen=70, precision=0.01,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=lambda x: 182 - theorem.fGriewank(x))
+
 
     # print(bga1.population_matrix)
     #
