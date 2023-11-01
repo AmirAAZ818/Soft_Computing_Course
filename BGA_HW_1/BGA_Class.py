@@ -2,6 +2,7 @@ from random import randint, random
 import theorem
 import math
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 class BGA:
@@ -31,22 +32,21 @@ class BGA:
 
         self.get_len_chro()  # estimating the number of bits for each dimension.
         self.Random_population()  # Making random population
-        # debug
-        print("__________ Random Population Matrix __________")
-        print(self.population_matrix)
-        print("_______ L _______")
-        print(self.L)
 
-        for generation in range(self.max_gen):
-            print(f"________________ Generation : {generation} ________________")
+        pbar = tqdm(range(self.max_gen), colour="green")
+        for generation in pbar:
             self.one_gen()
 
+            pbar.set_postfix(
+                {"Generation": generation, "Average_fitness": self.history['avg_fitness'][self.last_gen - 1],
+                 "Best Fitness ": self.best_so_far['fitness']})
+
         print("___________ Results ___________")
-        print(f"Best Chromosome :        {self.decode_chromosome(self.best_so_far['chromosome'])}")
+        print(f"Best Chromosome :        {self.best_so_far['chromosome']}")
         print(f"Best Fitness    :        {self.best_so_far['fitness']}")
         print(f"Average Fitness :        {self.history['avg_fitness'][self.last_gen - 1]}")
+        print(f"Best X :                 {self.decode_chromosome(self.best_so_far['chromosome'])}")
         print(f"Optimum Value :          {self.function(self.decode_chromosome(self.best_so_far['chromosome']))}")
-
 
         # plotting Results
         self.plot_info()
@@ -59,7 +59,7 @@ class BGA:
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
-        print(f"Population : {nex_gen}")
+        # print(f"Population : {nex_gen}")
         self.population_matrix = nex_gen
         self.last_gen += 1
 
@@ -245,11 +245,10 @@ class BGA:
 # max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=150, crossover_rate=0.8,
-               mutation_rate=0.1, max_gen=70, precision=0.01,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=200, crossover_rate=0.8,
+               mutation_rate=0.1, max_gen=100, precision=0.01,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=lambda x: 182 - theorem.fGriewank(x))
-
 
     # print(bga1.population_matrix)
     #
