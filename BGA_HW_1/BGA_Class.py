@@ -25,6 +25,7 @@ class BGA:
         self.L = [0 for i in range(self.dim)]
         self.history = {"avg_fitness": [], "best_so_far": []}
         self.best_so_far = {'fitness': 0, "chromosome": list()}
+        self.best_current = {'fitness': 0, "chromosome": list()}
 
     def Run(self):
         print("BGA Is Running .....")
@@ -39,14 +40,16 @@ class BGA:
 
             pbar.set_postfix(
                 {"Generation": generation, "Average_fitness": self.history['avg_fitness'][self.last_gen - 1],
-                 "Best Fitness ": self.best_so_far['fitness']})
+                 "Best Fitness ": self.best_current['fitness']})
 
         print("___________ Results ___________")
-        print(f"Best Chromosome :        {self.best_so_far['chromosome']}")
-        print(f"Best Fitness    :        {self.best_so_far['fitness']}")
-        print(f"Average Fitness :        {self.history['avg_fitness'][self.last_gen - 1]}")
-        print(f"Best X :                 {self.decode_chromosome(self.best_so_far['chromosome'])}")
-        print(f"Optimum Value :          {self.function(self.decode_chromosome(self.best_so_far['chromosome']))}")
+        print(f"Best So Far Chromosome :        {self.best_so_far['chromosome']}")
+        print(f"Best So Far Fitness    :        {self.best_so_far['fitness']}")
+        print(f"Average Fitness        :        {self.history['avg_fitness'][self.last_gen - 1]}")
+        print(f"Best Last Fitness      :        {self.best_current['fitness']}")
+        print(f"Best Last Chromosome   :        {self.best_current['chromosome']}")
+        print(f"Best Last X            :        {self.decode_chromosome(self.best_current['chromosome'])}")
+        print(f"Optimum Value          :        {self.function(self.decode_chromosome(self.best_current['chromosome']))}")
 
         # plotting Results
         self.plot_info()
@@ -94,10 +97,16 @@ class BGA:
         return mating_pool
 
     def log(self, fitness_list):  # saves the best so far and avg fitness to log
+        # updating best so far property
         if self.best_so_far['fitness'] < max(fitness_list):
             self.best_so_far['fitness'] = max(fitness_list)
             self.best_so_far['chromosome'] = self.population_matrix[fitness_list.index(self.best_so_far['fitness'])]
 
+        # updating the best current property
+        self.best_current['fitness'] = max(fitness_list)
+        self.best_current['chromosome'] = self.population_matrix[fitness_list.index(self.best_current['fitness'])]
+
+        # Saving history
         self.history["best_so_far"].append(self.best_so_far['fitness'])
         self.history["avg_fitness"].append(sum(fitness_list) / len(fitness_list))
 
