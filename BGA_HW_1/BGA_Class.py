@@ -55,12 +55,15 @@ class BGA:
         # printing the params in tabular structure
         self.print_parameters()
 
+        print("______________________________________")
+
         pbar = tqdm(range(self.max_gen), colour="green")
         for generation in pbar:
             self.one_gen()
 
             pbar.set_postfix(
                 {"Generation": generation})
+        print("______________________________________")
 
         # Showing results
         print("___________ Results ___________")
@@ -276,38 +279,17 @@ class BGA:
 # max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=200, crossover_rate=0.85,
-               mutation_rate=0.1, max_gen=100, precision=0.01,
+    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=100, crossover_rate=0.8,
+               mutation_rate=0.1, max_gen=50, precision=0.001,
                function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                fitness_function=lambda x: 182 - theorem.fGriewank(x))
 
     # print(bga1.population_matrix)
-    #
     # print(182 - theorem.fGriewank([28, 0]))
     # print(theorem.fGriewank([-33, -43]))
 
     bga1.Run()
-    #
-    # print(bga1.population_matrix)
-    # print(bga1.L)
-    # print(bga1.chromosome_len)
-    # bga1.get_len_chro()
-    # bga1.Random_population()
-    # print(bga1.population_matrix)
-    # print('-----------------------')
-    # bga1.Crossover(bga1.population_matrix)
-    # print(bga1.Child_matrix)
-    # print('-----------------')
-    # bga1.Mutation(bga1.Child_matrix)
-    # print(bga1.Child_matrix)
-    # mutation_mat = [[1 if random() <= 0.2 else 0 for i in range(10)] for j in
-    #                 range(6)]
-    # child_matrix = [[randint(0, 1) for i in range(10)] for j in range(6)]
-    # mutated_matrix = [[bit1 ^ bit2 for bit1, bit2 in zip(mutation_mat[i], child_matrix[i])] for i in
-    #                   range(6)]
-    # print(mutation_mat)
-    # print(child_matrix)
-    # print(mutated_matrix)
+
 
 
 if __name__ == "__main__":
