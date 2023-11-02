@@ -1,5 +1,5 @@
 from math import cos,sqrt,sin,pi,prod,exp,tan
-import numpy
+import numpy as np
 #-------------------------------------------------------------------------
 # The two Dimensional Griewank's function
 
