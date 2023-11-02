@@ -279,10 +279,10 @@ class BGA:
 # max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
-    bga1 = BGA(target_function=theorem.fGriewank, function_dim=2, population=100, crossover_rate=0.8,
-               mutation_rate=0.1, max_gen=50, precision=0.001,
-               function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
-               fitness_function=lambda x: 182 - theorem.fGriewank(x))
+    bga1 = BGA(target_function=theorem.mccormick, function_dim=2, population=1000, crossover_rate=0.8,
+               mutation_rate=0.005, max_gen=80, precision=0.001,
+               function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
+               fitness_function=lambda x : 45 - theorem.mccormick(x))
 
     # print(bga1.population_matrix)
     # print(182 - theorem.fGriewank([28, 0]))
