@@ -258,25 +258,28 @@ class BGA:
 
     def plot_info(self):
 
+        plt.style.use('Solarize_Light2')
         fig, axis = plt.subplots(1, 2)
 
         # Plot of avg fitness
-        y = self.history['avg_fitness']
+        y2 = self.history['best_so_far']
+        y1 = self.history['avg_fitness']
         x = list(range(self.max_gen))
-        axis[0].plot(x, y, label="Average Fitness", color="blue")
+
+        axis[0].plot(x, y1, label="Average Fitness", color="blue")
+        axis[0].plot(x, y2, label="Best So Far", color="red", ls="--",)
         axis[0].legend()
 
         # Plot of the best fitness so far
-        y = self.history['best_so_far']
-        x = list(range(self.max_gen))
-        axis[1].plot(x, y, label="Best So Far", color="blue")
-        axis[1].legend()
+        # y3 =
+        # axis[1].plot(x, y, label="Best So Far", color="blue")
+
+        # axis[1].legend()
 
         plt.show()
         # plt.savefig(r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
 
 
-# max of fGriwank is 181.64 in the given bounds
 def main():
     # just for testing
     bga1 = BGA(target_function=theorem.mccormick, function_dim=2, population=1000, crossover_rate=0.8,
@@ -284,13 +287,10 @@ def main():
                function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
                fitness_function=lambda x : 45 - theorem.mccormick(x))
 
-    # print(bga1.population_matrix)
     # print(182 - theorem.fGriewank([28, 0]))
     # print(theorem.fGriewank([-33, -43]))
 
     bga1.Run()
-
-
 
 if __name__ == "__main__":
     main()
