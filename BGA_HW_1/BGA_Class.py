@@ -9,7 +9,7 @@ from tabulate import tabulate
 class BGA:
 
     def __init__(self, target_function, fitness_function, function_dim, population,
-                 crossover_rate, mutation_rate, precision, function_config, max_gen=50, run_bga=30):
+                     crossover_rate, mutation_rate, error, function_config, max_gen=50, run_bga=30):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -22,7 +22,7 @@ class BGA:
         self.pm = mutation_rate
         self.max_gen = max_gen  # maximum number of generations
         self.last_gen = 0
-        self.precision = precision  # quantization error # todo
+        self.error = error  # quantization error
         self.L = [0 for i in range(self.dim)]
         self.history = {"mean_fitness": [], "best_so_far": [], "avg_mean_fitness": [], "avg_best_so_far": []}
         self.best_so_far = {'fitness': 0, "chromosome": list()}
@@ -36,7 +36,7 @@ class BGA:
             ["Algorithm Runs", self.runs],
             ["Maximum Generation", self.max_gen],
             ["Population Size", self.population],
-            ["Precision", self.precision],
+            ["Error", self.error],
             ["CrossOver Rate", self.pc],
             ["Mutation Rate", self.pm],
             ["Chromosome Length", self.chromosome_len],
@@ -222,9 +222,9 @@ class BGA:
         # private method
         def var_bit_len(boundary,
                         idx):  # boundary is a dictionary : bound = {"low": a, "high": b}, output : appending the bit len of the corresponding variable in the L list
-            # we use precision and its formula to estimate bit len of the variable
+            # we use error and its formula to estimate bit len of the variable
             rng = boundary['high'] - boundary['low']
-            length = math.ceil(math.log(rng / self.precision, 2) - 1)
+            length = math.ceil(math.log(rng / self.error, 2) - 1)
             # print()
             self.L[idx] = length
 
@@ -346,9 +346,9 @@ class BGA:
 def main():
     # just for testing
     bga1 = BGA(target_function=theorem.mccormick, function_dim=2, population=500, crossover_rate=0.8,
-               mutation_rate=0.005, max_gen=80, precision=0.001,
+               mutation_rate=0.005, max_gen=80, error=0.001,
                function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
-               fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=10)
+               fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=5)
 
     # print(182 - theorem.fGriewank([28, 0]))
     # print(theorem.fGriewank([-33, -43]))
