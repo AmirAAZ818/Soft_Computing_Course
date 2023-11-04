@@ -4,12 +4,12 @@ import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
 from tabulate import tabulate
-
+import os
 
 class BGA:
 
     def __init__(self, target_function, fitness_function, function_dim, population,
-                 crossover_rate, mutation_rate, error, function_config, max_gen=50, run_bga=30):
+                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30, ):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -29,6 +29,7 @@ class BGA:
         self.best_current = {'fitness': 0, "chromosome": list()}
         self.runs = run_bga
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
+        self.save_dir = plot_dir
 
     def print_parameters(self):
         # This is a method that prints parameters in tabular structure
@@ -347,5 +348,5 @@ class BGA:
         plt.plot(x, y2, label="Average Best So Far", color="red", ls="--")
 
         plt.legend()
-        plt.show()
-        # plt.savefig(r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots\BGA_plots.png")
+        # plt.show()
+        plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
