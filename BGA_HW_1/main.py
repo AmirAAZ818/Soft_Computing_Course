@@ -7,22 +7,25 @@ def main():
     you can run the algorithm for the function provided and the functions that you want.
     make sure to give the function to the constructor in the required format.
     NOTE: you can Start the algorithm by calling BGA_object.Run() or GA_object.Run()
-    Warnin
+    WARNING: before using this class install: numpy, tqdm, tabulate, matplotlib
     """
 
     # mccormick function
-    # mcc_bga = BGA(target_function=theorem.mccormick, function_dim=2, population=500, crossover_rate=0.8,
-    #            mutation_rate=0.005, max_gen=80, error=0.001,
-    #            function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
-    #            fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=5)
+    mcc_bga = BGA(target_function=theorem.mccormick, function_dim=2, population=500, crossover_rate=0.8,
+                  mutation_rate=0.005, max_gen=80, error=0.001,
+                  function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
+                  fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=5,
+                  plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots")
 
     # mcc_bga.Run()
 
     # Rastrigin function
     rast_bga = BGA(target_function=theorem.rastrigin, function_dim=4, population=600, crossover_rate=0.8,
                    mutation_rate=0.005, max_gen=250, error=0.001,
-                   function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
-                   fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=5)
+                   function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
+                                    {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
+                   fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=1,
+                   plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots")
 
     rast_bga.Run()
 

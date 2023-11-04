@@ -1,10 +1,10 @@
 from random import randint, random
-import theorem
 import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
 from tabulate import tabulate
 import os
+
 
 class BGA:
 
