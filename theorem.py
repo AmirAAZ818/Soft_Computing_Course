@@ -34,10 +34,10 @@ def rastrigin(x):
 #-------------------------------------------------------------------
 # The 2 variable Rosenbrock's function
 
-def rosenbrock(x, y):
+def rosenbrock(x):
     a = 1
     b = 100
-    return (a - x) ** 2 + b * (y - x ** 2) ** 2
+    return (a - x[0]) ** 2 + b * (x[1] - x[0] ** 2) ** 2
 #--------------------------------------------------------
 def fitness_function_1(chromosome):
     
