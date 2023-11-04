@@ -9,7 +9,7 @@ from tabulate import tabulate
 class BGA:
 
     def __init__(self, target_function, fitness_function, function_dim, population,
-                     crossover_rate, mutation_rate, error, function_config, max_gen=50, run_bga=30):
+                 crossover_rate, mutation_rate, error, function_config, max_gen=50, run_bga=30):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -78,8 +78,7 @@ class BGA:
         print(f"Last Average Best So Far  :        {self.history['avg_best_so_far'][self.last_gen - 1]}")
         print(f"Last Average Mean Fitness :        {self.history['avg_mean_fitness'][self.last_gen - 1]}")
 
-
-        # Plotting Results
+        # Plotting absf, amf
         self.plot_info()
 
     def post_process(self):
@@ -97,7 +96,7 @@ class BGA:
             for j in range(self.runs):
                 _sum += self.best_answers[j][i]
 
-            mean_best_solutions[i] = _sum/len(self.best_answers)
+            mean_best_solutions[i] = _sum / len(self.best_answers)
 
         # avg best so far, and avg mean fitness
         avg_mean_fitness = [0 for i in range(self.max_gen)]
@@ -121,6 +120,7 @@ class BGA:
     def reset(self):
         """This method empties the lists and values
         used for tracking the metrics for one fully run of the algorithm"""
+
         self.history['mean_fitness'] = []
         self.history['best_so_far'] = []
 
@@ -157,7 +157,8 @@ class BGA:
         self.last_gen += 1
 
     def roulette_wheel(self,
-                       fitness_values):  # inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L
+                       fitness_values):
+        """inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L"""
         sum_fitness = sum(fitness_values)
         probs = [(fitness / sum_fitness) for fitness in fitness_values]
 
@@ -183,7 +184,9 @@ class BGA:
 
         return mating_pool
 
-    def log_gen(self, fitness_list):  # saves the best so far and avg fitness of a generation in one run of BGA
+    def log_gen(self, fitness_list):
+        """saves the best so far and avg fitness of a generation in one run of BGA"""
+
         # updating best so far property
         if self.best_so_far['fitness'] < max(fitness_list):
             self.best_so_far['fitness'] = max(fitness_list)
@@ -217,15 +220,19 @@ class BGA:
         self.population_matrix = population_matrix
 
     def get_len_chro(
-            self):  # a method that values the length list: L. where L[i] means the length of the bits used for the i'th variable.
+            self):
+        """a method that values the length list: L.
+        where L[i] means the length of the bits used for the i'th variable."""
 
         # private method
         def var_bit_len(boundary,
-                        idx):  # boundary is a dictionary : bound = {"low": a, "high": b}, output : appending the bit len of the corresponding variable in the L list
+                        idx):
+            """boundary is a dictionary : bound = {"low": a, "high": b},
+            output : appending the bit len of the corresponding variable in the L list"""
+
             # we use error and its formula to estimate bit len of the variable
             rng = boundary['high'] - boundary['low']
             length = math.ceil(math.log(rng / self.error, 2) - 1)
-            # print()
             self.L[idx] = length
 
         boundaries = self.func_config  # giving the config to a variable called boundaries
@@ -238,42 +245,37 @@ class BGA:
                           chromosome):  # returns a tuple containing the real values of the genes for a given chromosome
 
         def binary_to_decimal(
-                binary_num):  # binary_num is a list of 0s and 1s. we join it and make it string, and then we convert it using a special way in python
+                binary_num):
+            """binary_num is a list of 0s and 1s.
+            we join it and make it string, and then we convert it using a special way in python"""
+
             b_num = list(map(str, binary_num))
             return int(''.join(b_num), 2)
 
         rng = 0
         decoded_chromosome = []
         for gene_idx, length in enumerate(self.L):
-            # print(f"________________________bit len of L_{gene_idx} is : {length}_____________________________")
-            # converting from binary to decimal
-            # print("$$$$$$$$$$$Binary to decimal phase$$$$$$$$$$$$")
             new_rng = rng + length
 
             x_i = chromosome[rng:new_rng]  # slice of the list that contains the gene bits
-            # print(f"sliced chromosome : {x_i}")
             decoded_gene = binary_to_decimal(x_i)  # decoded_gene = decoded binary number
-            # print(f"decimal converted gene  : {decoded_gene}")
 
             # normalizing the decoded gene value
-            # print("$$$$$$$ Normalizing phase $$$$$$$$")
             no_decoded_gene = decoded_gene / ((2 ** length) - 1)
-            # print(f"normalized gene : {no_decoded_gene}")
 
             # next step (don't know it in english :) )
-            # print("$$$$$$$$$$ Negasht phase $$$$$$$")
             config = self.func_config[gene_idx]  # assigning the boundary of the gene to a variable called config
-            # print(f"dim config is : {config}")
             x_real = config["low"] + ((config['high'] - config['low']) * no_decoded_gene)
-            # print(f"x real is : {x_real}")
             decoded_chromosome.append(x_real)
 
             rng = new_rng
 
         return tuple(decoded_chromosome)
 
-    def decode_chromosomes(self):  # returns a tuple of tuples of the decoded value for variables, size: N x dim
-        # giving each chromosome to the decode_chromosome function and adding it in a list
+    def decode_chromosomes(self):
+        """returns a tuple of tuples of the decoded value for variables, size: N x dim
+        # giving each chromosome to the decode_chromosome function and adding it in a list """
+
         decoded_values = []  # this will be converted to a tuple at the end
         for chro in self.population_matrix:
             # print("_________________________________________________")
@@ -282,9 +284,11 @@ class BGA:
 
         return tuple(decoded_values)
 
-    def Crossover(self, mating_pool_mat):  # input: selected choros for parents / output: a matrix of childs
-        # this function gets parent matrix(selected parents for making child)
-        # and after cross over returns child matrix
+    def Crossover(self, mating_pool_mat):
+        """input: selected choros for parents / output: a matrix of children
+        this function gets parent matrix (selected parents for making child)
+        and after cross over returns child matrix """
+
         child_matrix = []
         i = 0
         while i < self.population - 1:
@@ -307,9 +311,10 @@ class BGA:
 
         return child_matrix
 
-    def Mutation(self, child_matrix):  # input: a matrix of childs from cross over stage / output: mutated child_matrix
-        # this function gets a matrix of childs, this matrix is output of cross over stage
-        # if rand is less than pm, changes 1 bit of one random choromosom 
+    def Mutation(self, child_matrix):
+        """ input: a matrix of children from cross over stage / output: mutated child_matrix
+        this function gets a matrix of children, this matrix is output of cross over stage
+        if rand is less than pm, changes one bit of one random chromosome """
         mutation_mat = [[1 if random() <= self.pm else 0 for i in range(self.chromosome_len)] for j in
                         range(self.population)]
         mutated_matrix = [[bit1 ^ bit2 for bit1, bit2 in zip(mutation_mat[i], child_matrix[i])] for i in
@@ -318,7 +323,10 @@ class BGA:
         return mutated_matrix
 
     def get_Fitness(self,
-                    decoded_chromosomes):  # returns a tuple of size N(population), that represents the fitness value for each chromosome
+                    decoded_chromosomes):
+        """returns a tuple of size N(population),
+        that represents the fitness value for each chromosome"""
+
         fitness_values = [0 for i in range(self.population)]
 
         for i in range(len(decoded_chromosomes)):
@@ -344,16 +352,12 @@ class BGA:
 
 
 def main():
-
-
-
     # bga1.Run()
     bga2 = BGA(target_function=theorem.rastrigin, function_dim=2, population=600, crossover_rate=0.8,
                mutation_rate=0.005, max_gen=150, error=0.001,
                function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
                fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=5)
     bga2.Run()
-
 
 
 if __name__ == "__main__":
