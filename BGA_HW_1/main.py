@@ -16,6 +16,13 @@ def main():
 
     # mcc_bga.Run()
 
+    # Rastrigin function
+    rast_bga = BGA(target_function=theorem.rastrigin, function_dim=2, population=600, crossover_rate=0.8,
+               mutation_rate=0.005, max_gen=150, error=0.001,
+               function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
+               fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=5)
+
+    # rast_bga.Run()
 
 
 
