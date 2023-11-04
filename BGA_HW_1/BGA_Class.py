@@ -345,13 +345,7 @@ class BGA:
 
 def main():
 
-    # bga1 = BGA(target_function=theorem.mccormick, function_dim=2, population=500, crossover_rate=0.8,
-    #            mutation_rate=0.005, max_gen=80, error=0.001,
-    #            function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
-    #            fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=5)
 
-    # print(182 - theorem.fGriewank([28, 0]))
-    # print(theorem.fGriewank([-33, -43]))
 
     # bga1.Run()
     bga2 = BGA(target_function=theorem.rastrigin, function_dim=2, population=600, crossover_rate=0.8,
