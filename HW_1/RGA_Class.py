@@ -135,13 +135,13 @@ class RGA:
 
         # Saving fitness values of the last produced population
         decoded_population = self.decode_chromosomes()
-        fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
+        fitness_values = self.get_Fitness(chromosomes=decoded_population)
         self.log_gen(fitness_values)
 
     def one_gen(self):  # This method produces one generation of the algorithm
 
-        decoded_population = self.decode_chromosomes()
-        fitness_values = self.get_Fitness(decoded_chromosomes=decoded_population)
+        fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
+
         self.log_gen(fitness_values)  # log the info of the last generation
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
@@ -206,7 +206,7 @@ class RGA:
         """
         This method randomly init a population matrix with continuous uniform distribution
         """
-        
+
         population_matrix = []  # N x d Matrix
 
         for i in range(self.population):
@@ -218,71 +218,6 @@ class RGA:
             population_matrix.append(chromosome)
 
         self.population_matrix = population_matrix
-
-    def get_len_chro(
-            self):
-        """a method that values the length list: L.
-        where L[i] means the length of the bits used for the i'th variable."""
-
-        # private method
-        def var_bit_len(boundary,
-                        idx):
-            """boundary is a dictionary : bound = {"low": a, "high": b},
-            output : appending the bit len of the corresponding variable in the L list"""
-
-            # we use error and its formula to estimate bit len of the variable
-            rng = boundary['high'] - boundary['low']
-            length = math.ceil(math.log(rng / self.error, 2) - 1)
-            self.L[idx] = length
-
-        boundaries = self.func_config  # giving the config to a variable called boundaries
-        for var_idx in range(len(boundaries)):  # giving each boundary to the method we made and updating the L list
-            var_bit_len(boundaries[var_idx], var_idx)
-
-        self.chromosome_len = sum(self.L)
-
-    def decode_chromosome(self,  # A method for decoding a chromosome
-                          chromosome):  # returns a tuple containing the real values of the genes for a given chromosome
-
-        def binary_to_decimal(
-                binary_num):
-            """binary_num is a list of 0s and 1s.
-            we join it and make it string, and then we convert it using a special way in python"""
-
-            b_num = list(map(str, binary_num))
-            return int(''.join(b_num), 2)
-
-        rng = 0
-        decoded_chromosome = []
-        for gene_idx, length in enumerate(self.L):
-            new_rng = rng + length
-
-            x_i = chromosome[rng:new_rng]  # slice of the list that contains the gene bits
-            decoded_gene = binary_to_decimal(x_i)  # decoded_gene = decoded binary number
-
-            # normalizing the decoded gene value
-            no_decoded_gene = decoded_gene / ((2 ** length) - 1)
-
-            # next step (don't know it in english :) )
-            config = self.func_config[gene_idx]  # assigning the boundary of the gene to a variable called config
-            x_real = config["low"] + ((config['high'] - config['low']) * no_decoded_gene)
-            decoded_chromosome.append(x_real)
-
-            rng = new_rng
-
-        return tuple(decoded_chromosome)
-
-    def decode_chromosomes(self):
-        """returns a tuple of tuples of the decoded value for variables, size: N x dim
-        # giving each chromosome to the decode_chromosome function and adding it in a list """
-
-        decoded_values = []  # this will be converted to a tuple at the end
-        for chro in self.population_matrix:
-            # print("_________________________________________________")
-            # print(f"Current chromosome is : {chro}")
-            decoded_values.append(self.decode_chromosome(chro))
-
-        return tuple(decoded_values)
 
     def Crossover(self, mating_pool_mat):
         """input: selected choros for parents / output: a matrix of children
@@ -322,15 +257,14 @@ class RGA:
 
         return mutated_matrix
 
-    def get_Fitness(self,
-                    decoded_chromosomes):
+    def get_Fitness(self, chromosomes):
         """returns a tuple of size N(population),
         that represents the fitness value for each chromosome"""
 
         fitness_values = [0 for i in range(self.population)]
 
-        for i in range(len(decoded_chromosomes)):
-            chromosome = decoded_chromosomes[i]
+        for i in range(len(chromosomes)):
+            chromosome = chromosomes[i]
             fitness_values[i] = self.fit_func(chromosome)
         return tuple(fitness_values)
 
