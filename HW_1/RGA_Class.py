@@ -1,4 +1,4 @@
-from random import randint, random
+from random import randint, random, uniform
 import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
@@ -6,10 +6,10 @@ from tabulate import tabulate
 import os
 
 
-class BGA:
+class RGA:
 
     def __init__(self, target_function, fitness_function, function_dim, population,
-                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30, ):
+                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30 ):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -38,7 +38,7 @@ class BGA:
             ["Error", self.error],
             ["CrossOver Rate", self.pc],
             ["Mutation Rate", self.pm],
-            ["Chromosome Length", self.chromosome_len],
+            ["Chromosome Length", self.dim],
             ["Function Input Shape", self.dim]
         ]
         print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
@@ -203,12 +203,18 @@ class BGA:
         self.best_answers.append(decoded_best_last_chromosome)
 
     def Random_population(self):
-        population_matrix = []  # N x Sigma(Li) from i = 0 to function_dim
+        """
+        This method randomly init a population matrix with continuous uniform distribution
+        """
+        
+        population_matrix = []  # N x d Matrix
 
         for i in range(self.population):
-            chromosome = []
-            for j in range(self.chromosome_len):
-                chromosome.append(randint(0, 1))
+            chromosome = [0 for k in range(self.dim)]
+            for j in range(self.dim):
+                l_bound = self.func_config[j]['low']
+                h_bound = self.func_config[j]['high']
+                chromosome[j] = (uniform(0, 1) * (h_bound - l_bound)) + l_bound
             population_matrix.append(chromosome)
 
         self.population_matrix = population_matrix
@@ -343,3 +349,6 @@ class BGA:
         plt.legend()
         # plt.show()
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
+
+
+
