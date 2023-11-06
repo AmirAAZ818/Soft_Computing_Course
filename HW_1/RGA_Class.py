@@ -9,7 +9,7 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, function_dim, population,
-                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30 ):
+                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -138,7 +138,8 @@ class RGA:
         fitness_values = self.get_Fitness(chromosomes=decoded_population)
         self.log_gen(fitness_values)
 
-    def one_gen(self):  # This method produces one generation of the algorithm
+    def one_gen(self):
+        """This method produces one generation of the algorithm"""
 
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
 
@@ -152,7 +153,8 @@ class RGA:
 
     def roulette_wheel(self,
                        fitness_values):
-        """inputs fitness values of each chromosome, returns the mating pool Matrix of size N x L"""
+        """inputs fitness values of each chromosome
+        return: Mating pool Matrix of size N x dim"""
         sum_fitness = sum(fitness_values)
         probs = [(fitness / sum_fitness) for fitness in fitness_values]
 
@@ -164,7 +166,8 @@ class RGA:
             cumulative_probs[i] = prob
 
         # Selecting N chromosomes from population matrix
-        mating_pool = []
+        mating_pool = []  # A matrix of size N x dim
+
         for i in range(self.population):
             r_num = random()
             idx = 0
@@ -179,7 +182,7 @@ class RGA:
         return mating_pool
 
     def log_gen(self, fitness_list):
-        """saves the best so far and avg fitness of a generation in one run of BGA"""
+        """saves the best so far and avg fitness of a generation in one run of RGA"""
 
         # updating best so far property
         if self.best_so_far['fitness'] < max(fitness_list):
@@ -219,10 +222,41 @@ class RGA:
 
         self.population_matrix = population_matrix
 
+
     def Crossover(self, mating_pool_mat):
         """input: selected choros for parents / output: a matrix of children
         this function gets parent matrix (selected parents for making child)
         and after cross over returns child matrix """
+
+        def clip_vector(vector):
+            """
+
+            :param value:
+            :param l_bound:
+            :param h_bound:
+            :return: keeps
+            """
+            return [max(min(vector[i], self.func_config[i]['high']), self.func_config[i]['low']) for i in range(self.dim)]
+
+        def vmult(value, vector):
+            """
+            This method multiplies value in each element of the list and returns it
+            :param value: value you want to multiply in a vector
+            :param vector: you know what it is :)
+            :return: value * vector
+            """
+            return [value * element for element in vector]
+
+        def vadd(v1, v2):
+            """
+            This method adds v1 and v2 elementwise and returns a list v3
+            :param v1: vector 1
+            :param v2: vector 2
+            :return: v1 + v2 (list of len(v1))
+            """
+            assert len(v1) == len(v2)
+
+            return [e1 + e2 for e1, e2 in zip(v1, v2)]
 
         child_matrix = []
         i = 0
@@ -232,13 +266,15 @@ class RGA:
                 child_matrix.append(mating_pool_mat[i + 1])
                 i += 2
             else:
-                point = randint(0, self.chromosome_len)
-                # print(point)
-                child1 = mating_pool_mat[i]
-                child2 = mating_pool_mat[i + 1]
-                for j in range(point, self.chromosome_len):
-                    child2[j] = mating_pool_mat[i][j]
-                    child1[j] = mating_pool_mat[i + 1][j]
+                # generating landas for each crossover
+                landa1 = uniform(0, 1)
+                landa2 = 1 - landa1
+
+                parent1 = mating_pool_mat[i]
+                parent2 = mating_pool_mat[i + 1]
+
+                child1 = vadd(vmult(landa1, parent1), vmult(landa2, parent2))
+                child2 = vadd(vmult(landa2, parent1), vmult(landa1, parent2))
 
                 child_matrix.append(child1)
                 child_matrix.append(child2)
@@ -283,6 +319,3 @@ class RGA:
         plt.legend()
         # plt.show()
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
-
-
-
