@@ -348,5 +348,5 @@ class BGA:
         plt.plot(x, y2, label="Average Best So Far", color="red", ls="--")
 
         plt.legend()
-        # plt.show()
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
+        plt.show()

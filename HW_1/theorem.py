@@ -5,14 +5,14 @@ import numpy as np
 # -------------------------------------------------------------------------
 # The two Dimensional Griewank's function
 
-def fGriewank(x):
+def fGriewank(x):  # d = 2
     return (x[0] ** 2 + x[1] ** 2) / 4000 - cos(x[0] / sqrt(2)) * cos(x[1] / sqrt(3)) + 1
 
 
 # -------------------------------------------------------------------------
 # The Griewank's function
 
-def griewank(x):
+def griewank(x):  # d = n
     n = len(x)
     s = sum([xi ** 2 for xi in x]) / 4000
     p = prod([cos(xi / sqrt(i + 1)) for i, xi in enumerate(x)])
@@ -51,7 +51,7 @@ def rosenbrock(x):
 
 
 # --------------------------------------------------------
-def fitness_function_1(chromosome): # d = 3
+def fitness_function_1(chromosome):  # d = 3
     x = chromosome[0]
     y = chromosome[1]
     z = chromosome[2]

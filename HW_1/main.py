@@ -10,24 +10,25 @@ def main():
     WARNING: before using this class install: numpy, tqdm, tabulate, matplotlib
     """
 
-    # mccormick function
-    mcc_bga = BGA(target_function=theorem.mccormick, function_dim=2, population=500, crossover_rate=0.8,
-                  mutation_rate=0.005, max_gen=80, error=0.001,
-                  function_config=[{'low': -1.5, 'high': 4}, {'low': -3, 'high': 4}],
-                  fitness_function=lambda x: 45 - theorem.mccormick(x), run_bga=5,
-                  plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots")
-
-    # mcc_bga.Run()
-
     # Rastrigin function
     rast_bga = BGA(target_function=theorem.rastrigin, function_dim=4, population=600, crossover_rate=0.8,
-                   mutation_rate=0.005, max_gen=250, error=0.001,
+                   mutation_rate=0.005, max_gen=350, error=0.001,
                    function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
                                     {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
-                   fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=1,
-                   plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\BGA_HW_1\Plots")
+                   fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=30,
+                   plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\HW_1\Plots")
 
     rast_bga.Run()
+
+    # Griewank Function
+    grie_bga = BGA(target_function=theorem.griewank, function_dim=4, population=1000, crossover_rate=0.85,
+                   mutation_rate=0.005, max_gen=400, error=0.001,
+                   function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600},
+                                    {'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
+                   fitness_function=lambda x: 250 - theorem.griewank(x), run_bga=5,
+                   plot_dir=r"E:\University of Kerman\Term 5\Soft Computing\HomeWorks\Soft_Computing_Course\HW_1\Plots")
+
+    grie_bga.Run()
 
 
 if __name__ == "__main__":
