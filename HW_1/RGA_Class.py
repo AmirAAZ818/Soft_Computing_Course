@@ -283,15 +283,23 @@ class RGA:
         return child_matrix
 
     def Mutation(self, child_matrix):
-        """ input: a matrix of children from cross over stage / output: mutated child_matrix
-        this function gets a matrix of children, this matrix is output of cross over stage
-        if rand is less than pm, changes one bit of one random chromosome """
-        mutation_mat = [[1 if random() <= self.pm else 0 for i in range(self.chromosome_len)] for j in
-                        range(self.population)]
-        mutated_matrix = [[bit1 ^ bit2 for bit1, bit2 in zip(mutation_mat[i], child_matrix[i])] for i in
-                          range(self.population)]
 
-        return mutated_matrix
+
+        for i in range(len(child_matrix)):
+            if random() < self.pm:
+                # Perform mutation on each gene of the chromosome
+                for j in range(self.dim):
+                    l_bound = self.func_config[j]['low']
+                    h_bound = self.func_config[j]['high']
+                    mutation_mean = (h_bound + l_bound) / 2
+                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard
+                    mutation_value = normal(loc=mutation_mean, scale=mutation_std)  # Clip the value to be within the bounds
+                    mutation_value = max(min(mutation_value, h_bound), l_bound)
+                    child_matrix[i][j] = mutation_value
+
+        return child_matrix
+    
+
 
     def get_Fitness(self, chromosomes):
         """returns a tuple of size N(population),
