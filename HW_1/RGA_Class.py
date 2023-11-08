@@ -1,4 +1,4 @@
-from random import randint, random, uniform
+from random import randint, random, uniform, gauss
 import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
@@ -147,7 +147,6 @@ class RGA:
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
-        # print(f"Population : {nex_gen}")
         self.population_matrix = nex_gen
         self.last_gen += 1
 
@@ -222,7 +221,6 @@ class RGA:
 
         self.population_matrix = population_matrix
 
-
     def Crossover(self, mating_pool_mat):
         """input: selected choros for parents / output: a matrix of children
         this function gets parent matrix (selected parents for making child)
@@ -230,13 +228,12 @@ class RGA:
 
         def clip_vector(vector):
             """
+            This method clips the values of the vector with respect to high bound and low bound of the vector
 
-            :param value:
-            :param l_bound:
-            :param h_bound:
-            :return: keeps
+            :return: Clipped vector(list)
             """
-            return [max(min(vector[i], self.func_config[i]['high']), self.func_config[i]['low']) for i in range(self.dim)]
+            return [max(min(vector[i], self.func_config[i]['high']), self.func_config[i]['low']) for i in
+                    range(self.dim)]
 
         def vmult(value, vector):
             """
@@ -258,6 +255,9 @@ class RGA:
 
             return [e1 + e2 for e1, e2 in zip(v1, v2)]
 
+        landa1 = uniform(0, 1)
+        landa2 = 1 - landa1
+
         child_matrix = []
         i = 0
         while i < self.population - 1:
@@ -267,8 +267,6 @@ class RGA:
                 i += 2
             else:
                 # generating landas for each crossover
-                landa1 = uniform(0, 1)
-                landa2 = 1 - landa1
 
                 parent1 = mating_pool_mat[i]
                 parent2 = mating_pool_mat[i + 1]
@@ -283,23 +281,25 @@ class RGA:
         return child_matrix
 
     def Mutation(self, child_matrix):
+        """
+        This method applies Mutation phase on Child Matrix
 
-
-        for i in range(len(child_matrix)):
+        :return: next generation, a matrix of size N x dim
+        """
+        for i in range(self.population):
             if random() < self.pm:
                 # Perform mutation on each gene of the chromosome
                 for j in range(self.dim):
                     l_bound = self.func_config[j]['low']
                     h_bound = self.func_config[j]['high']
                     mutation_mean = (h_bound + l_bound) / 2
-                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard
-                    mutation_value = normal(loc=mutation_mean, scale=mutation_std)  # Clip the value to be within the bounds
-                    mutation_value = max(min(mutation_value, h_bound), l_bound)
+                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard # todo
+                    mutation_value = gauss(mu=mutation_mean, sigma=mutation_std)
+                    mutation_value = max(min(mutation_value, h_bound),
+                                         l_bound)  # Clip the value to be within the bounds
                     child_matrix[i][j] = mutation_value
 
         return child_matrix
-    
-
 
     def get_Fitness(self, chromosomes):
         """returns a tuple of size N(population),
@@ -329,17 +329,17 @@ class RGA:
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
 
 
-
-
-
-def f(x,y):
+def f(x, y):
     x = y
+
+
 def main():
     # testing random population method
-    rga = RGA(f,f,2,4,0.8,0.005,0.01,[{'low':1, 'high':2}, {'low':1, 'high':2}],
+    rga = RGA(f, f, 2, 4, 0.8, 0.005, 0.01, [{'low': 1, 'high': 2}, {'low': 1, 'high': 2}],
               '~/Documents/GitHub/Soft_Computing_Course')
-    
+
     rga.Random_population()
     print(rga.population_matrix)
+
 
 main()
