@@ -319,3 +319,19 @@ class RGA:
         plt.legend()
         # plt.show()
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
+
+
+
+
+
+def f(x,y):
+    x = y
+def main():
+    # testing random population method
+    rga = RGA(f,f,2,4,0.8,0.005,0.01,[{'low':1, 'high':2}, {'low':1, 'high':2}],
+              '~/Documents/GitHub/Soft_Computing_Course')
+    
+    rga.Random_population()
+    print(rga.population_matrix)
+
+main()
