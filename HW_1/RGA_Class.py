@@ -345,10 +345,16 @@ def main():
     # rga.Run()
     # print(theorem.booth((-10, -10)))
 
-    rga = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 165 - theorem.rastrigin(x),
+    # rga = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 165 - theorem.rastrigin(x),
+    #           function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
+    #                            {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}], crossover_rate=0.5,
+    #           mutation_rate=0.01, max_gen=300, population=700, run_bga=5)
+
+    rga = RGA(target_function=theorem.griewank, fitness_function=lambda x: 250 - theorem.griewank(x), run_bga=5,
               function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
-                               {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}], crossover_rate=0.5,
-              mutation_rate=0.01, max_gen=300, population=700, run_bga=5)
+                                    {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
+                                    crossover_rate=0.5, mutation_rate=0.01, max_gen=300, population=700)
+
     rga.Run()
 
 
