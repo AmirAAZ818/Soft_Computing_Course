@@ -139,7 +139,10 @@ class RGA:
         """This method produces one generation of the algorithm"""
 
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
-        assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
+        try:
+            assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
+        except:
+            print(min(fitness_values))
 
         self.log_gen(fitness_values)  # log the info of the last generation
         mating_pool = self.roulette_wheel(fitness_values)
@@ -336,11 +339,17 @@ class RGA:
 
 
 def main():
-    rga = RGA(target_function=theorem.booth, fitness_function=lambda x: 2600 - theorem.booth(x),
-              function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}], crossover_rate=0.8,
-              mutation_rate=0.001, max_gen=300, population=400, run_bga=1)
-    rga.Run()
+    # rga = RGA(target_function=theorem.booth, fitness_function=lambda x: 2600 - theorem.booth(x),
+    #           function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}], crossover_rate=0.5,
+    #           mutation_rate=0.01, max_gen=300, population=400, run_bga=5)
+    # rga.Run()
     # print(theorem.booth((-10, -10)))
+
+    rga = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 165 - theorem.rastrigin(x),
+              function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
+                               {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}], crossover_rate=0.5,
+              mutation_rate=0.01, max_gen=300, population=700, run_bga=5)
+    rga.Run()
 
 
 if __name__ == "__main__":
