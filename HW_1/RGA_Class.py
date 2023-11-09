@@ -1,4 +1,4 @@
-from random import randint, random, uniform, gauss
+from random import random, uniform, gauss
 import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
@@ -9,26 +9,25 @@ import theorem
 
 class RGA:
 
-    def __init__(self, target_function, fitness_function, function_dim, population,
-                 crossover_rate, mutation_rate, error, function_config, plot_dir, max_gen=50, run_bga=30):
+    def __init__(self, target_function, fitness_function, population,
+                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_bga=30):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
-        self.function = target_function  # تابع هدف
+        self.function = target_function  # target function
         self.fit_func = fitness_function  # the fitness function
-        self.dim = function_dim  # تعداد پارامترهای تابع
-        self.population = population  # اندازه جمعیت
+        self.dim = len(function_config)  # dim of the function
+        self.population = population  # population size
         self.pc = crossover_rate
         self.pm = mutation_rate
         self.max_gen = max_gen  # maximum number of generations
         self.last_gen = 0
-        self.error = error  # quantization error
         self.history = {"mean_fitness": [], "best_so_far": [], "avg_mean_fitness": [], "avg_best_so_far": []}
         self.best_so_far = {'fitness': 0, "chromosome": list()}
         self.best_current = {'fitness': 0, "chromosome": list()}
         self.runs = run_bga
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
-        self.save_dir = plot_dir
+        self.plot_save_dir = None if plot_dir is None else plot_dir
 
     def print_parameters(self):
         # This is a method that prints parameters in tabular structure
@@ -36,10 +35,8 @@ class RGA:
             ["Algorithm Runs", self.runs],
             ["Maximum Generation", self.max_gen],
             ["Population Size", self.population],
-            ["Error", self.error],
             ["CrossOver Rate", self.pc],
             ["Mutation Rate", self.pm],
-            ["Chromosome Length", self.dim],
             ["Function Input Shape", self.dim]
         ]
         print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
@@ -47,7 +44,7 @@ class RGA:
     def Run(self):
         # Starting the algo
         print("\033[1;36;40m" + "=" * 50)
-        print("\033[1;36;40m" + "   Running Real Genetic Algorithm   ")
+        print("\033[1;36;40m" + "   Running Real-Valued Genetic Algorithm   ")
         print("\033[1;36;40m" + "=" * 50 + "\033[0m")
 
         # printing the params in tabular structure
@@ -77,13 +74,13 @@ class RGA:
         self.plot_info()
 
     def post_process(self):
-        """This method processes self.history['avg_mean_fitness'] and self.history['avg_best_so_far'] and self.best_answers'}
-        returns:
-            1. Mean Best Solution (mean of the best answers found in each run)
-            2. Optimum value found for the target function
+        """This method processes self.history['avg_mean_fitness'] and self.history['avg_best_so_far'] and
+        self.best_answers}
+        :returns: 1. Mean Best Solution (mean of the best answers found in each run) 2. Optimum
+        value found for the target function
         """
 
-        # Evaluating best solution
+        # Evaluating the best solution
         mean_best_solutions = [0 for i in range(self.dim)]
 
         for i in range(self.dim):
@@ -142,13 +139,13 @@ class RGA:
         """This method produces one generation of the algorithm"""
 
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
+        assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
 
         self.log_gen(fitness_values)  # log the info of the last generation
         mating_pool = self.roulette_wheel(fitness_values)
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
         self.population_matrix = nex_gen
-        print(self.population_matrix)
         self.last_gen += 1
 
     def roulette_wheel(self,
@@ -202,8 +199,7 @@ class RGA:
         self.history["avg_best_so_far"].append(self.history['best_so_far'])
 
         # Saving the best decoded value of the chromosome of the last generated population
-        decoded_best_last_chromosome = self.decode_chromosome(chromosome=self.best_current['chromosome'])
-        self.best_answers.append(decoded_best_last_chromosome)
+        self.best_answers.append(self.best_current['chromosome'])
 
     def Random_population(self):
         """
@@ -223,10 +219,14 @@ class RGA:
         self.population_matrix = population_matrix
 
     def Crossover(self, mating_pool_mat):
-        """input: selected chromosome for parents / output: a matrix of children
-        this function gets parent matrix (selected parents for making child)
+        """
+        This function gets parent matrix (selected parents for making child)
         and after cross over returns child matrix.
-        We use Convex Arithmatic Crossover in here
+
+        We use Convex Arithmatic Crossover in here.
+        :param: Selected chromosome for parents, matrix of size N x d
+        :returns: A matrix of children, size N x d
+
         """
 
         def clip_vector(vector):
@@ -243,7 +243,7 @@ class RGA:
             This method multiplies value in each element of the list and returns it
             :param value: value you want to multiply in a vector
             :param vector: you know what it is :)
-            :return: value * vector
+            :return: Value * vector
             """
             return [value * element for element in vector]
 
@@ -327,12 +327,21 @@ class RGA:
         plt.plot(x, y2, label="Average Best So Far", color="red", ls="--")
 
         plt.legend()
-        # plt.show()
-        plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
+        if self.plot_save_dir is not None:
+            plt.savefig(os.path.join(self.plot_save_dir, "RGA_plot.png"))
+            print("_" * 5, "Plot Saving", "_" * 5)
+            print(f"Plot Saved in : {self.plot_save_dir}")
+
+        plt.show()
 
 
 def main():
-    print("Main function")
+    rga = RGA(target_function=theorem.booth, fitness_function=lambda x: 2600 - theorem.booth(x),
+              function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}], crossover_rate=0.8,
+              mutation_rate=0.001, max_gen=300, population=400, run_bga=1)
+    rga.Run()
+    # print(theorem.booth((-10, -10)))
 
 
-main()
+if __name__ == "__main__":
+    main()
