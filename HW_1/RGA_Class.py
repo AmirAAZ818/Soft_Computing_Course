@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
 from tabulate import tabulate
 import os
+import theorem
 
 
 class RGA:
@@ -134,8 +135,7 @@ class RGA:
             self.one_gen()
 
         # Saving fitness values of the last produced population
-        decoded_population = self.decode_chromosomes()
-        fitness_values = self.get_Fitness(chromosomes=decoded_population)
+        fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
         self.log_gen(fitness_values)
 
     def one_gen(self):
@@ -148,6 +148,7 @@ class RGA:
         next_gen_v1 = self.Crossover(mating_pool)
         nex_gen = self.Mutation(next_gen_v1)
         self.population_matrix = nex_gen
+        print(self.population_matrix)
         self.last_gen += 1
 
     def roulette_wheel(self,
@@ -222,9 +223,11 @@ class RGA:
         self.population_matrix = population_matrix
 
     def Crossover(self, mating_pool_mat):
-        """input: selected choros for parents / output: a matrix of children
+        """input: selected chromosome for parents / output: a matrix of children
         this function gets parent matrix (selected parents for making child)
-        and after cross over returns child matrix """
+        and after cross over returns child matrix.
+        We use Convex Arithmatic Crossover in here
+        """
 
         def clip_vector(vector):
             """
@@ -283,8 +286,7 @@ class RGA:
     def Mutation(self, child_matrix):
         """
         This method applies Mutation phase on Child Matrix
-
-        :return: next generation, a matrix of size N x dim
+        :return: Next generation, a matrix of size N x dim
         """
         for i in range(self.population):
             if random() < self.pm:
@@ -329,17 +331,8 @@ class RGA:
         plt.savefig(os.path.join(self.save_dir, "BGA_plot.png"))
 
 
-def f(x, y):
-    x = y
-
-
 def main():
-    # testing random population method
-    rga = RGA(f, f, 2, 4, 0.8, 0.005, 0.01, [{'low': 1, 'high': 2}, {'low': 1, 'high': 2}],
-              '~/Documents/GitHub/Soft_Computing_Course')
-
-    rga.Random_population()
-    print(rga.population_matrix)
+    print("Main function")
 
 
 main()
