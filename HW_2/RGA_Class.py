@@ -1,23 +1,21 @@
 from random import random, uniform, gauss
-import math
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
 from tabulate import tabulate
 import os
-import theorem
 
 
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_bga=30):
+                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
         self.function = target_function  # target function
         self.fit_func = fitness_function  # the fitness function
         self.dim = len(function_config)  # dim of the function
-        self.population = population  # population size
+        self.population = population if population % 2 == 0 else population + 1  # Note: Population must be an even integer.
         self.pc = crossover_rate
         self.pm = mutation_rate
         self.max_gen = max_gen  # maximum number of generations
@@ -25,7 +23,7 @@ class RGA:
         self.history = {"mean_fitness": [], "best_so_far": [], "avg_mean_fitness": [], "avg_best_so_far": []}
         self.best_so_far = {'fitness': 0, "chromosome": list()}
         self.best_current = {'fitness': 0, "chromosome": list()}
-        self.runs = run_bga
+        self.runs = run_rga
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
         self.plot_save_dir = None if plot_dir is None else plot_dir
 
@@ -272,13 +270,11 @@ class RGA:
                 child_matrix.append(mating_pool_mat[i + 1])
                 i += 2
             else:
-                # generating landas for each crossover
-
                 parent1 = mating_pool_mat[i]
                 parent2 = mating_pool_mat[i + 1]
 
-                child1 = vadd(vmult(landa1, parent1), vmult(landa2, parent2))
-                child2 = vadd(vmult(landa2, parent1), vmult(landa1, parent2))
+                child1 = clip_vector(vadd(vmult(landa1, parent1), vmult(landa2, parent2)))
+                child2 = clip_vector(vadd(vmult(landa2, parent1), vmult(landa1, parent2)))
 
                 child_matrix.append(child1)
                 child_matrix.append(child2)
@@ -336,27 +332,3 @@ class RGA:
             print(f"Plot Saved in : {self.plot_save_dir}")
 
         plt.show()
-
-
-def main():
-    # rga = RGA(target_function=theorem.booth, fitness_function=lambda x: 2600 - theorem.booth(x),
-    #           function_config=[{'low': -10, 'high': 10}, {'low': -10, 'high': 10}], crossover_rate=0.5,
-    #           mutation_rate=0.01, max_gen=300, population=400, run_bga=5)
-    # rga.Run()
-    # print(theorem.booth((-10, -10)))
-
-    # rga = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 165 - theorem.rastrigin(x),
-    #           function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
-    #                            {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}], crossover_rate=0.5,
-    #           mutation_rate=0.01, max_gen=300, population=700, run_bga=5)
-
-    rga = RGA(target_function=theorem.griewank, fitness_function=lambda x: 250 - theorem.griewank(x), run_bga=5,
-              function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
-                                    {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
-                                    crossover_rate=0.5, mutation_rate=0.01, max_gen=300, population=700)
-
-    rga.Run()
-
-
-if __name__ == "__main__":
-    main()
