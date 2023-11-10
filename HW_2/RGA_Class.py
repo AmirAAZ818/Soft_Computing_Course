@@ -54,7 +54,6 @@ class RGA:
             self.reset()
 
             # Fully running the algorithm
-            print(f"Run : {run + 1}")
             self.one_run()
 
             # Logging lists of best_so_far and mean fitness produced by one_run().
@@ -140,7 +139,7 @@ class RGA:
         try:
             assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
         except:
-            print(min(fitness_values))
+            print(f"Fitness value is negative : {min(fitness_values)}")
 
         self.log_gen(fitness_values)  # log the info of the last generation
         mating_pool = self.roulette_wheel(fitness_values)

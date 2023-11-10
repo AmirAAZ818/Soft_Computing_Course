@@ -11,7 +11,15 @@ def main():
     """
 
     # Rastrigin Function
-    rga_griewank = RGA(target_function=theorem.griewank, fitness_function=lambda x: 250 - theorem.griewank(x),
+    # rga_griewank = RGA(target_function=theorem.griewank, fitness_function=lambda x: 350 - theorem.griewank(x),
+    #                    function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600},
+    #                                     {'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
+    #                    crossover_rate=0.5, mutation_rate=0.01, max_gen=300, population=700, run_rga=30)
+    #
+    # rga_griewank.Run()
+
+    # # Griewank Function
+    rga_griewank = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 200 - theorem.rastrigin(x),
                        function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
                                         {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
                        crossover_rate=0.5, mutation_rate=0.01, max_gen=300, population=700, run_rga=30)
