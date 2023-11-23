@@ -1,0 +1,12 @@
+Domain = [{'Griewank_2' : fGriewank , 'low' : [-600,600] , 'high' : [-600,600], 'x_hi' : 600, 'x_lo' : -600, 'y_hi' : 600, 'y_lo' : -600},
+            {'Michalewicz' : michalewicz , 'low' : [0] * n , 'high' : [pi] * n , 'x_hi' : [(0) for _ in range(n)], 'x_lo' : [(pi) for _ in range(n)]},
+            {'Rastrigin' : rastrigin , 'low' : [-5.12] * n , 'high'  : [5.12] * n , 'x_hi' :[(5.12) for _ in range(n)] , 'x_lo' : [(-5.12) for _ in range(n)] },
+            {'Rosenbrock' : rosenbrock , 'low' : [-5.12, -5.12] , 'high' : [5.12, 5.12] , 'x_hi' : 5.12 , 'x_lo' : -5.12, 'y_hi' : 5.12, 'y_lo' : -5.12},
+            {'function_1' : fitness_function_1 , 'low' : [-10,-10,-10] , 'high' : [10,10,10] , 'x_hi' : 10, 'x_lo' -10: , 'y_hi' 10: , 'y_lo' : -10, 'z_hi' : 10 , 'z_lo' : -10},
+            {'Booth' : booth , 'low' : [-10] , 'high' : [10] , 'x_hi' : 10, 'x_lo' : -10 },
+            {'Bukin' : bukin_n6 , 'low' : [-15,-3] , 'high' : [-5,3] , 'x_hi' : -5 , 'x_lo' : -15 , 'y_hi' : 3 , 'y_lo' : -3 },
+            {'Cross_in_Tray' : cross-in-Tray , 'low' : [-10,-10] , 'high' : [10,10] , 'x_hi' : 10 , 'x_lo' : -10 , 'y_hi' : 10 , 'y_lo' : -10 },
+            {'Holder_Table' : holder_table , 'low' : [-10,-10] , 'high' : [10,10] , 'x_hi' : 10 , 'x_lo' : -10 , 'y_hi' : 10 , 'y_lo' : -10 },
+            {'McComick' : mccormick , 'low' : [-1.5,-3], 'high' : [4,4] , 'x_hi' : 4 , 'x_lo' : -1.5, 'y_hi' : 4 , 'y_lo' : -3 },
+            {'Poloni' : poloni , 'low' : [-pi , -pi] , 'high' : [pi , pi] , 'x_hi' pi : , 'x_lo' : -pi , 'y_hi' : pi , 'y_lo' : -pi },
+            {'Viennet' : viennet , 'low' : [-3,-3] , 'high' : [3 , 3] , 'x_hi' : 3 , 'x_lo' : -3 , 'y_hi' : 3 , 'y_lo' : -3 }]
