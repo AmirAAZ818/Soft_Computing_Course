@@ -8,7 +8,7 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30):
+                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30, controller=None):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -26,6 +26,8 @@ class RGA:
         self.runs = run_rga
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
         self.plot_save_dir = None if plot_dir is None else plot_dir
+
+        self.contorller = None if controller is None else controller
 
     def print_parameters(self):
         # This is a method that prints parameters in tabular structure
