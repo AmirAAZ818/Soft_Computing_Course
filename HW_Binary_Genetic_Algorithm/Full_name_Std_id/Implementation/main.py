@@ -16,7 +16,7 @@ def main():
                    function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
                                     {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
                    fitness_function=lambda x: 85 - theorem.rastrigin(x), run_bga=30,
-                   plot_dir=r"/HW_1/Plots")
+                   plot_dir=r"/HW_Binary_Genetic_Algorithm/Plots")
 
     rast_bga.Run()
 
@@ -26,7 +26,7 @@ def main():
                    function_config=[{'low': -600, 'high': 600}, {'low': -600, 'high': 600},
                                     {'low': -600, 'high': 600}, {'low': -600, 'high': 600}],
                    fitness_function=lambda x: 250 - theorem.griewank(x), run_bga=5,
-                   plot_dir=r"/HW_1/Plots")
+                   plot_dir=r"/HW_Binary_Genetic_Algorithm/Plots")
 
     grie_bga.Run()
 
