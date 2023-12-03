@@ -12,7 +12,7 @@ def trimf_maker(domain, start, peak, end):
     """
 
     # we should assert this so that the method would be logically valid
-    assert start < peak < end
+    assert start < peak < end, "Support is not valid"
 
     def trimf(x):
         if x <= start or x >= end:
