@@ -47,3 +47,15 @@ class Fuzzy_Controller:
             return {'low':1, 'high':0}
         else:
             {'low':(3.33 * cm) - 3.33, 'high':(3.33 * cm) -2.33}
+
+
+    def fuzzify_lastpm(self,lastpm):
+
+        if lastpm < 0.001:
+            return {'low':1, 'aveage':0, 'high':0}
+        elif lastpm < 0.005:
+            return {'low':(-250*lastpm)+1.25, 'aveage':(250*lastpm)-0.25, 'high':0}
+        elif lastpm < 0.01:
+            return {'low':0, 'aveage':(-200*lastpm)+2, 'high':(200*lastpm)-1}
+        else:
+            return {'low':0, 'aveage': 0, 'high':1}
