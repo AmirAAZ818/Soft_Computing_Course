@@ -7,7 +7,7 @@ class Fuzzy_Controller:
         self.population = population
         self.N = max_gen
         
-    def defuzifify_generation(self,gen):
+    def fuzifify_generation(self,gen):
         
         """ this method gets the number of current generation
             and calculata the gen / max gen and fuzify the result.
@@ -30,3 +30,4 @@ class Fuzzy_Controller:
         # for range 0.8 to 1 : end is 1 else is 0
         else:
             return {'start':0, 'middle':0, 'end':1}
+        
