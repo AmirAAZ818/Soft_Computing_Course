@@ -31,3 +31,19 @@ class Fuzzy_Controller:
         else:
             return {'start':0, 'middle':0, 'end':1}
         
+
+    def fuzzify_cm(self, current_bst, last_best,maximize=False):
+
+        """ the set for cm in minimize and maximize is diffrent.
+            to slve this problem and use uniq sets, we use diffrent formula 
+            for cm.
+            minimize parameter shows that we want to maximize or not.
+        """
+        cm = current_bst / last_best
+        if maximize:
+            cm = 1 / cm
+        
+        if cm < 0.7:
+            return {'low':1, 'high':0}
+        else:
+            {'low':(3.33 * cm) - 3.33, 'high':(3.33 * cm) -2.33}
