@@ -59,3 +59,23 @@ class Fuzzy_Controller:
             return {'low':0, 'aveage':(-200*lastpm)+2, 'high':(200*lastpm)-1}
         else:
             return {'low':0, 'aveage': 0, 'high':1}
+        
+
+# testing 
+def main():
+    fuzzy = Fuzzy_Controller(10,100)
+    gen = 10
+    x = fuzzy.fuzifify_generation(gen)
+    print(f'fuzzified generation for gen {gen} and max gen {fuzzy.N} ', x)
+    print('---------------')
+    cbest = 10
+    lbest = 20
+    y = fuzzy.fuzzify_cm(cbest, lbest)
+    print(f'fuzzified cm for current best {cbest} and last best {lbest} ', y)
+    print('---------------')
+    pm = 0.002
+    z = fuzzy.fuzzify_lastpm(pm)
+    print(f'fuzzified pm for pm {pm} ', z)
+
+
+main()
