@@ -3,16 +3,38 @@ import numpy as np
 
 class Fuzzy_Controller:
 
-    def __init__(self, population,max_gen):
+    def __init__(self, population,max_gen, k):
         self.population = population
         self.N = max_gen
-        
+        self.k = k
+        self.prev_bsf = 0
+        self.prev_pm = 0
+    def fuzzifier(self, cur_gen, p_m, cur_bsf ):
+        if cur_gen % self.k != 0:
+            return
+
+        def CM(self, cur_bsf):
+            cm = self.prev_bsf / cur_bsf
+            return cm
+
+        cm = CM(cur_bsf)
+
+
+
+
+
+
+
+
+
+
+
     def fuzifify_generation(self,gen):
         
-        """ this method gets the number of current generation
-            and calculata the gen / max gen and fuzify the result.
-            it returns the result as a dictionary with 3 keys(start, middle, end)
-            this keys are the lables of fuzy sets """
+        """ this method gets the number of current generations
+            and calculate the gen / max gen and fuzzify the result.
+            it returns the result as a dictionary with three keys (start, middle, end)
+            these keys are the labels of fuzzy sets """
         
         x = gen / self.N
         # for range 0 to 0.4 : start is 1 else is 0
@@ -46,7 +68,7 @@ class Fuzzy_Controller:
         if cm < 0.7:
             return {'low':1, 'high':0}
         else:
-            {'low':(3.33 * cm) - 3.33, 'high':(3.33 * cm) -2.33}
+            return {'low':(3.33 * cm) - 3.33, 'high':(3.33 * cm) -2.33}
 
 
     def fuzzify_lastpm(self,lastpm):
@@ -78,4 +100,6 @@ def main():
     print(f'fuzzified pm for pm {pm} ', z)
 
 
-main()
+
+if __name__ == "__main__":
+    main()
