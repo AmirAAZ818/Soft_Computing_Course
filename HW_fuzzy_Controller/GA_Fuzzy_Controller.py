@@ -11,18 +11,34 @@ class Fuzzy_Controller:
         self.prev_bsf = 0
         self.prev_pm = 0
 
+        self.mf_pm = {"low": mfs.trapmf_maker([0, 1], 0, [0, 1e-3], 5e-3),
+                      "avg": mfs.trimf_maker([0, 1], 1e-3, 5e-3, 1e-2),
+                      "high": mfs.trapmf_maker([0, 1], 5e-3, [1e-2, 15e-3], 15e-3)}
+
+        self.mf_cm = {"low": mfs.trapmf_maker([0, float("inf")], 0, [0, 7e-1], 99e-2),
+                      "high": mfs.trapmf_maker([0, float("inf")], 7e-1, [1, float("inf")], float("inf"))}
+
+        self.mf_gen = {}
+
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
-        membership_values = {"cm": None, "pm_prev": None}
+        membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
             return
 
         def CM(cur_bsf):
+            """
+            if cm gets closer to one, it means that algorithm is not making the desired amount of progress
+            :param cur_bsf: a number, the best so far of the current generation
+            :return:  0< cm <inf
+            """
             cm = self.prev_bsf / cur_bsf + 1e-3
             return cm
 
         cm = CM(cur_bsf)
 
         membership_values["pm_prev"] = self.fuzzify_pm(p_m)
+        membership_values['cm'] = self.fuzzify_cm(cm)
+        
 
     def fuzifify_generation(self, gen):
 
@@ -48,26 +64,22 @@ class Fuzzy_Controller:
         else:
             return {'start': 0, 'middle': 0, 'end': 1}
 
-    def fuzzify_cm(self, current_bst, last_best, maximize=False):
+    def fuzzify_cm(self, cm):
 
         """ the set for cm in minimize and maximize is diffrent.
             to slve this problem and use uniq sets, we use diffrent formula 
             for cm.
             minimize parameter shows that we want to maximize or not.
         """
-        cm = current_bst / last_best
-        if maximize:
-            cm = 1 / cm
+        low_mf = self.mf_cm["low"]
+        high_mf = self.mf_cm["high"]
 
-        if cm < 0.7:
-            return {'low': 1, 'high': 0}
-        else:
-            return {'low': (3.33 * cm) - 3.33, 'high': (3.33 * cm) - 2.33}
+        return {"low": low_mf(cm), "high": high_mf(cm)}
 
     def fuzzify_pm(self, p_m):
-        low_mf = mfs.trapmf_maker([0, 1], 0, [0, 1e-3], 5e-3)
-        avg_mf = mfs.trimf_maker([0, 1], 1e-3, 5e-3, 1e-2)
-        high_mf = mfs.trapmf_maker([0, 1], 5e-3, [1e-2, 15e-3], 15e-3)
+        low_mf = self.mf_pm["low"]
+        avg_mf = self.mf_pm["avg"]
+        high_mf = self.mf_pm["high"]
 
         return {"low": low_mf(p_m), "avg": avg_mf(p_m), "high": high_mf(p_m)}
 
