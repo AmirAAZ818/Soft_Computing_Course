@@ -8,7 +8,8 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30, controller=None):
+                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30, controller=None,
+                 gpc=5):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -27,7 +28,9 @@ class RGA:
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
         self.plot_save_dir = None if plot_dir is None else plot_dir
 
-        self.contorller = None if controller is None else controller
+        # Init controller
+        self.controller = None if controller is None else controller(max_gen=self.max_gen,
+                                                                     k=gpc)  # gpc = generation per control
 
     def print_parameters(self):
         # This is a method that prints parameters in tabular structure
@@ -37,7 +40,8 @@ class RGA:
             ["Population Size", self.population],
             ["CrossOver Rate", self.pc],
             ["Mutation Rate", self.pm],
-            ["Function Input Shape", self.dim]
+            ["Function Input Shape", self.dim],
+            ["Controller", "FCS" if self.controller is not None else "None"]
         ]
         print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
 
@@ -54,6 +58,9 @@ class RGA:
         for run in range(self.runs):
             # Reset the properties that were given values for one fully run of the algorithm
             self.reset()
+
+            # Reset the Controller states for the next fully run of the algorithm
+            self.controller.Reset()
 
             # Fully running the algorithm
             self.one_run()
@@ -126,9 +133,15 @@ class RGA:
     def one_run(self):  # This method fully runs the algorithm once
         self.Random_population()  # Making random population
 
+        # Initial state of p_m for the start of the algorithm
+        self.pm = 1e-3 if self.controller is not None else self.pm
+
         # running the algorithm
         for generation in trange(self.max_gen):
             self.one_gen()
+
+            # Updating p_m every k generation
+            self.pm = self.controller.control(cur_gen=generation, p_m=self.pm, cur_bsf=self.history['best_so_far'][generation])
 
         # Saving fitness values of the last produced population
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
@@ -138,8 +151,10 @@ class RGA:
         """This method produces one generation of the algorithm"""
 
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
+
+        # to make sure there is no zero fittness value
         try:
-            assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
+            assert min(fitness_values) >= 0
         except:
             print(f"Fitness value is negative : {min(fitness_values)}")
 

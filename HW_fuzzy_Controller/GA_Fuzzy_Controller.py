@@ -4,8 +4,7 @@ import Membership_functions as mfs
 
 class Fuzzy_Controller:
 
-    def __init__(self, population, max_gen, k):
-        self.population = population
+    def __init__(self, max_gen, k):
         self.N = max_gen
         self.k = k
         self.prev_bsf = 0
@@ -22,6 +21,15 @@ class Fuzzy_Controller:
                        "middle": mfs.trimf_maker([0, 1], 0.4, 0.6, 0.8),
                        "end": mfs.trapmf_maker([0, 1], 6e-1, [8e-1, 1], 1)}
 
+    def control(self, cur_gen, p_m, cur_bsf):
+        fuzzy_vars = self.fuzzifier(cur_gen=cur_gen, p_m=p_m, cur_bsf=cur_bsf)
+
+        # updating bsf and pm for the next control phase
+        self.prev_bsf = cur_bsf
+        self.prev_pm = p_m
+        print(f"________cur gen is : {cur_gen}________")
+        print(fuzzy_vars)
+
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
@@ -33,7 +41,7 @@ class Fuzzy_Controller:
             :param cur_bsf: a number, the best so far of the current generation
             :return:  0< cm <inf
             """
-            cm = self.prev_bsf / cur_bsf + 1e-3
+            cm = self.prev_bsf / (cur_bsf + 1e-3)
             return cm
 
         cm = CM(cur_bsf)
@@ -42,13 +50,15 @@ class Fuzzy_Controller:
         membership_values['cm'] = self.fuzzify_cm(cm)
         membership_values['gen'] = self.fuzifify_generation(cur_gen)
 
+        return membership_values
+
     def fuzifify_generation(self, gen):
         """ this method gets the number of current generations
             and calculate the gen / max gen and fuzzify the result.
             it returns the result as a dictionary with three keys (start, middle, end)
             these keys are the labels of fuzzy sets """
 
-        x = gen / self.mf_gen
+        x = gen / self.N
         start_mf = self.mf_gen["start"]
         middle_mf = self.mf_gen["middle"]
         end_mf = self.mf_gen["end"]
@@ -73,24 +83,24 @@ class Fuzzy_Controller:
 
         return {"low": low_mf(p_m), "avg": avg_mf(p_m), "high": high_mf(p_m)}
 
+    def Reset(self):
+        """
+        This method resets the pm and bsf of the controller,
+        giving it the quality to be used multiple times for the multiple runs of the algorithm
+        :return: Noting
+        """
+        self.prev_pm = 0
+        self.prev_bsf = 0
 
-# testing 
+
+# testing
 def main():
-    fuzzy = Fuzzy_Controller(10, 100)
-    gen = 10
-    x = fuzzy.fuzifify_generation(gen)
-    print(f'fuzzified generation for gen {gen} and max gen {fuzzy.N} ', x)
-    print('---------------')
-    cbest = 10
-    lbest = 20
-    y = fuzzy.fuzzify_cm(cbest, lbest)
-    print(f'fuzzified cm for current best {cbest} and last best {lbest} ', y)
-    print('---------------')
-    pm = 0.002
-    z = fuzzy.fuzzify_lastpm(pm)
-    print(f'fuzzified pm for pm {pm} ', z)
+    fcs = Fuzzy_Controller(100, 5)
+    bsf = np.arange(0, 202, 2)
+    pm = np.arange(1e-3, 1e-2, 9e-5)
+    for i in range(100):
+        fcs.control(cur_gen=i, p_m=pm[i], cur_bsf=bsf[i])
 
 
 if __name__ == "__main__":
     main()
-

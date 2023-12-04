@@ -52,11 +52,12 @@ def trapmf_maker(domain, start, peak, end):
     assert start <= peak[0] <= peak[1] <= end, "parameters are not valid"
 
     def trapmf(x):
-        if x <= start or x >= end:
-            return 0
 
         if peak[0] <= x <= peak[1]:
             return 1
+
+        if x <= start or x >= end:
+            return 0
 
         before_peak_slope = 1 / (peak[0] - start) if peak[0] != start else 0
         after_peak_slope = 1 / (peak[1] - end) if peak[1] != end else 0
