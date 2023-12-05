@@ -38,25 +38,27 @@ def main():
     # plt.ylim([-0.05, 1.05])
     # plt.show()
 
-    mf_gen_low = mfs.trapmf_maker([0, 1], 0, [0, 4e-1], 6e-1)
-    mf_gen_mid = mfs.trimf_maker([0,1], 0.4, 0.6, 0.8)
-    mf_gen_high = mfs.trapmf_maker([0,1], 6e-1, [8e-1, 1], 1)
+    # mf_gen_low = mfs.trapmf_maker([0, 1], 0, [0, 4e-1], 6e-1)
+    # mf_gen_mid = mfs.trimf_maker([0,1], 0.4, 0.6, 0.8)
+    # mf_gen_high = mfs.trapmf_maker([0,1], 6e-1, [8e-1, 1], 1)
+    #
+    # x = np.arange(0, 1.05, 5e-2)
+    # y1 = [mf_gen_low(x[i]) for i in range(len(x))]
+    # y2 = [mf_gen_mid(x[i]) for i in range(len(x))]
+    # y3 = [mf_gen_high(x[i]) for i in range(len(x))]
+    #
+    # plt.plot(x, y1, color="blue")
+    # plt.plot(x, y2, color="green")
+    # plt.plot(x, y3, color="red")
+    #
+    # plt.title('GEN')
+    # plt.xlabel('x')
+    # plt.ylabel('Degree of Membership')
+    # plt.ylim([-0.05, 1.05])
+    # plt.show()
 
-    x = np.arange(0, 1.05, 5e-2)
-    y1 = [mf_gen_low(x[i]) for i in range(len(x))]
-    y2 = [mf_gen_mid(x[i]) for i in range(len(x))]
-    y3 = [mf_gen_high(x[i]) for i in range(len(x))]
-
-    plt.plot(x, y1, color="blue")
-    plt.plot(x, y2, color="green")
-    plt.plot(x, y3, color="red")
-
-    plt.title('GEN')
-    plt.xlabel('x')
-    plt.ylabel('Degree of Membership')
-    plt.ylim([-0.05, 1.05])
-    plt.show()
-
+    a = {"a": 2, "b": 3}
+    print(list(a.keys()))
 
 
 if __name__ == "__main__":

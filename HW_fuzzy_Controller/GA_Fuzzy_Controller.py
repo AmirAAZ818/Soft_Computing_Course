@@ -30,11 +30,20 @@ class Fuzzy_Controller:
         print(f"________cur gen is : {cur_gen}________")
         print(fuzzy_vars)
 
+        pm_strengths = self.matching(fuzzy_vars=fuzzy_vars)
+        pm_fuzzy_output = self.inference(pm_strengths)
+
     def fuzzify_variable(self, value, mf_dict):
         fuzzified_values = {}
         for label, mf_func in mf_dict.items():
             fuzzified_values[label] = mf_func(value)
         return fuzzified_values
+
+    def inference(self, pm_fuzzy):
+        fuzzy_sets = list(pm_fuzzy.keys)
+        fuzzy_output = {fuzzy_sets[f_set]: max(pm_fuzzy[f_set]) for f_set in fuzzy_sets}
+        
+        return fuzzy_output
 
     def matching(self, fuzzy_vars):
         pm_strengths = {"low": [], "avg": [], "high": []}
@@ -51,15 +60,12 @@ class Fuzzy_Controller:
         r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
         pm_strengths['low'].append(r1s)
 
-        
-
-
-
+        return pm_strengths
 
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
-            return 
+            return
 
         def CM(cur_bsf):
             """
