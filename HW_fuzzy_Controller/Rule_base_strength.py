@@ -58,20 +58,20 @@ class Fuzzy_Controller:
         pm_strengths['low'].append(r4s)
 
         # Rule 5
-        r5s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['average'], fuzzy_vars['gen']['low'])
+        r5s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['low'])
         pm_strengths['low'].append(r5s)
 
         # Rule 6
         r6s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
-        pm_strengths['average'].append(r6s)
+        pm_strengths['avg'].append(r6s)
 
         # Rule 7
         r7s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['middle'])
-        pm_strengths['average'].append(r7s)
+        pm_strengths['avg'].append(r7s)
 
         # Rule 8
-        r8s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['average'], fuzzy_vars['gen']['middle'])
-        pm_strengths['average'].append(r8s)
+        r8s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r8s)
 
         # Rule 9
         r9s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['middle'])
@@ -79,11 +79,11 @@ class Fuzzy_Controller:
 
         # Rule 10
         r10s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['middle'])
-        pm_strengths['average'].append(r10s)
+        pm_strengths['avg'].append(r10s)
 
         # Rule 11
-        r11s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['average'], fuzzy_vars['gen']['middle'])
-        pm_strengths['average'].append(r11s)
+        r11s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r11s)
 
         # Rule 12
         r12s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['middle'])
@@ -91,10 +91,10 @@ class Fuzzy_Controller:
 
         # Rule 13
         r13s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['high'])
-        pm_strengths['average'].append(r13s)
+        pm_strengths['avg'].append(r13s)
 
         # Rule 14
-        r14s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['average'], fuzzy_vars['gen']['high'])
+        r14s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['high'])
         pm_strengths['high'].append(r14s)
 
         # Rule 15
@@ -103,19 +103,19 @@ class Fuzzy_Controller:
 
         # Rule 16
         r16s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['high'])
-        pm_strengths['average'].append(r16s)
+        pm_strengths['avg'].append(r16s)
 
         # Rule 17
-        r17s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['average'], fuzzy_vars['gen']['high'])
+        r17s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['high'])
         pm_strengths['high'].append(r17s)
 
         # Rule 18
         r18s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['high'])
-        pm_strengths['average'].append(r18s)
+        pm_strengths['avg'].append(r18s)
 
         return pm_strengths
     
-    
+
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
