@@ -30,10 +30,17 @@ class Fuzzy_Controller:
         print(f"________cur gen is : {cur_gen}________")
         print(fuzzy_vars)
 
+    def fuzzify_variable(self, value, mf_dict):
+        fuzzified_values = {}
+        for label, mf_func in mf_dict.items():
+            fuzzified_values[label] = mf_func(value)
+        return fuzzified_values
+
+
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
-            return
+            return 
 
         def CM(cur_bsf):
             """
