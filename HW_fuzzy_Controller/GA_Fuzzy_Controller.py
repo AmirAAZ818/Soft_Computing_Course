@@ -56,7 +56,7 @@ class Fuzzy_Controller:
         """
         This method implements the matching phase of the control,
         where we evaluate the strength the outcome of each rule.
-        :param fuzzy_vars: A dict containing 3 other dicts which are fuzzified inputs 
+        :param fuzzy_vars: A dict containing 3 other dicts which are fuzzified inputs
         :return:
         """
         pm_strengths = {"low": [], "avg": [], "high": []}
@@ -66,12 +66,74 @@ class Fuzzy_Controller:
         pm_strengths['avg'].append(r1s)
 
         # Rule 2
-        r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['low'])
-        pm_strengths['high'].append(r1s)
+        r2s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['low'])
+        pm_strengths['high'].append(r2s)
 
         # Rule 3
-        r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
-        pm_strengths['low'].append(r1s)
+        r3s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
+        pm_strengths['low'].append(r3s)
+
+        # Rule 4
+        r4s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['low'])
+        pm_strengths['low'].append(r4s)
+
+        # Rule 5
+        r5s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['low'])
+        pm_strengths['low'].append(r5s)
+
+        # Rule 6
+        r6s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
+        pm_strengths['avg'].append(r6s)
+
+        # Rule 7
+        r7s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r7s)
+
+        # Rule 8
+        r8s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r8s)
+
+        # Rule 9
+        r9s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['middle'])
+        pm_strengths['low'].append(r9s)
+
+        # Rule 10
+        r10s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r10s)
+
+        # Rule 11
+        r11s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['middle'])
+        pm_strengths['avg'].append(r11s)
+
+        # Rule 12
+        r12s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['middle'])
+        pm_strengths['high'].append(r12s)
+
+        # Rule 13
+        r13s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['high'])
+        pm_strengths['avg'].append(r13s)
+
+        # Rule 14
+        r14s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['high'])
+        pm_strengths['high'].append(r14s)
+
+        # Rule 15
+        r15s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['high'])
+        pm_strengths['low'].append(r15s)
+
+        # Rule 16
+        r16s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['high'])
+        pm_strengths['avg'].append(r16s)
+
+        # Rule 17
+        r17s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['high'])
+        pm_strengths['high'].append(r17s)
+
+        # Rule 18
+        r18s = min(fuzzy_vars['cm']['low'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['high'])
+        pm_strengths['avg'].append(r18s)
+
+        return pm_strengths
 
         return pm_strengths
 
