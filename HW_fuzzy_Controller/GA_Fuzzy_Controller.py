@@ -36,6 +36,25 @@ class Fuzzy_Controller:
             fuzzified_values[label] = mf_func(value)
         return fuzzified_values
 
+    def matching(self, fuzzy_vars):
+        pm_strengths = {"low": [], "avg": [], "high": []}
+
+        # Rule 1
+        r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['low'], fuzzy_vars['gen']['low'])
+        pm_strengths['avg'].append(r1s)
+
+        # Rule 2
+        r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['avg'], fuzzy_vars['gen']['low'])
+        pm_strengths['high'].append(r1s)
+
+        # Rule 3
+        r1s = min(fuzzy_vars['cm']['high'], fuzzy_vars['pm_prev']['high'], fuzzy_vars['gen']['low'])
+        pm_strengths['low'].append(r1s)
+
+        
+
+
+
 
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
