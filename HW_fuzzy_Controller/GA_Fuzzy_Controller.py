@@ -57,7 +57,7 @@ class Fuzzy_Controller:
         This method implements the matching phase of the control,
         where we evaluate the strength the outcome of each rule.
         :param fuzzy_vars: A dict containing 3 other dicts which are fuzzified inputs
-        :return:
+        :return: a dict, which is the pm strengths for each set defined on the variable
         """
         pm_strengths = {"low": [], "avg": [], "high": []}
 
@@ -135,9 +135,14 @@ class Fuzzy_Controller:
 
         return pm_strengths
 
-        return pm_strengths
-
     def fuzzifier(self, cur_gen, p_m, cur_bsf):
+        """
+        This method does the fuzzifing phase of the FCS.
+        :param cur_gen: the current iteration of the genetic algorithm.
+        :param p_m: the current mutation rate of the genetic algorithm.
+        :param cur_bsf: the best so far up do this generation of the algorithm.
+        :return: fizzified input params as a dict.
+        """
         membership_values = {"cm": None, "pm_prev": None, "gen": None}
         if cur_gen % self.k != 0:
             return
