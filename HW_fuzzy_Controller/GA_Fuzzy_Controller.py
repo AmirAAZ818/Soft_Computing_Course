@@ -40,12 +40,25 @@ class Fuzzy_Controller:
         return fuzzified_values
 
     def inference(self, pm_fuzzy):
+        """
+        this method is for the inference phase of the algorithm
+        :param pm_fuzzy: a dict where keys represent the sets defined for the variable the fuzzy output from the matching phase.
+        :return: a dict where its keys are the same as pm_fuzzy keys,
+        this dict represents a fuzzy variable with its fuzzy sets defined on it,
+        representing the fuzzy output of the inference engine.
+        """
         fuzzy_sets = list(pm_fuzzy.keys)
         fuzzy_output = {fuzzy_sets[f_set]: max(pm_fuzzy[f_set]) for f_set in fuzzy_sets}
-        
+
         return fuzzy_output
 
     def matching(self, fuzzy_vars):
+        """
+        This method implements the matching phase of the control,
+        where we evaluate the strength the outcome of each rule.
+        :param fuzzy_vars: A dict containing 3 other dicts which are fuzzified inputs 
+        :return:
+        """
         pm_strengths = {"low": [], "avg": [], "high": []}
 
         # Rule 1
