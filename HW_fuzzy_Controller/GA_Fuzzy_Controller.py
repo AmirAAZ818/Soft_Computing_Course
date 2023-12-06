@@ -33,12 +33,6 @@ class Fuzzy_Controller:
         pm_strengths = self.matching(fuzzy_vars=fuzzy_vars)
         pm_fuzzy_output = self.inference(pm_strengths)
 
-    def fuzzify_variable(self, value, mf_dict):
-        fuzzified_values = {}
-        for label, mf_func in mf_dict.items():
-            fuzzified_values[label] = mf_func(value)
-        return fuzzified_values
-
     def inference(self, pm_fuzzy):
         """
         this method is for the inference phase of the algorithm
