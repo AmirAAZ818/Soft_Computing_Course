@@ -8,7 +8,7 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30, controller=None,
+                 crossover_rate, function_config, mutation_rate=1e-3, plot_dir=None, max_gen=50, run_rga=30, controller=None,
                  gpc=5):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
@@ -60,7 +60,8 @@ class RGA:
             self.reset()
 
             # Reset the Controller states for the next fully run of the algorithm
-            self.controller.Reset()
+            if self.controller is not None:
+                self.controller.Reset()
 
             # Fully running the algorithm
             self.one_run()
@@ -310,7 +311,7 @@ class RGA:
                     l_bound = self.func_config[j]['low']
                     h_bound = self.func_config[j]['high']
                     mutation_mean = (h_bound + l_bound) / 2
-                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard # todo
+                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard
                     mutation_value = gauss(mu=mutation_mean, sigma=mutation_std)
                     mutation_value = max(min(mutation_value, h_bound),
                                          l_bound)  # Clip the value to be within the bounds
@@ -348,3 +349,5 @@ class RGA:
             print(f"Plot Saved in : {self.plot_save_dir}")
 
         plt.show()
+
+        self.controller.plot_pm()
