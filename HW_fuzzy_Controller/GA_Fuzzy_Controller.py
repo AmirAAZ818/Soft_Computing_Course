@@ -2,6 +2,7 @@ import numpy as np
 import Membership_functions as mfs
 import matplotlib.pyplot as plt
 
+
 class Fuzzy_Controller:
 
     def __init__(self, max_gen, k):
@@ -9,8 +10,7 @@ class Fuzzy_Controller:
 
         :param max_gen: Maximum number of generations.
         :param k: The interval of each control action.
-        :param defuzzifier_method: The method
-        which will be used in defuzzification phase
+        Which will be used in the defuzzification phase
         when evaluating the crisp value from the fuzzy output.
         """
         self.N = max_gen
@@ -40,13 +40,15 @@ class Fuzzy_Controller:
         """
         self.pm_history.append(p_m)
 
-        if cur_gen % self.k != 0:
+        if (cur_gen % self.k != 0) or (cur_gen == 0):
             return p_m
 
         # Logging pm
+        print(f"\/\/\//\//\//\//\/\/\/\/{cur_gen}")
 
         # Fuzzifying phase
         fuzzy_vars = self.fuzzifier(cur_gen=cur_gen, p_m=p_m, cur_bsf=cur_bsf)
+        print(f"fuzzy input vars are : {fuzzy_vars}")
 
         # Updating bsf and pm for the next control phase
         self.prev_bsf = cur_bsf
@@ -55,8 +57,13 @@ class Fuzzy_Controller:
         # print(fuzzy_vars)
 
         pm_strengths = self.matching(fuzzy_vars=fuzzy_vars)
+        print(f"pm strengths : {pm_strengths}")
+
         pm_fuzzy_output = self.inference(pm_strengths)
+        print(f"fuzzy pm output : {pm_fuzzy_output}")
+
         crisp_pm = self.defuzzifier(pm_fuzzy_output)
+        print(f"crisp out put pm is  : {crisp_pm}")
 
         return crisp_pm
 
@@ -71,19 +78,18 @@ class Fuzzy_Controller:
             membership_degrees = []
             for x in X:
                 f_var = self.fuzzify_pm(x)
-                md = max(min(f_output['low'], f_var['low']), min(f_output['avg'], f_var['avg']), min(f_output['high'], f_var['high']))
+                md = max(min(f_output['low'], f_var['low']), min(f_output['avg'], f_var['avg']),
+                         min(f_output['high'], f_var['high']))
                 membership_degrees.append(md)
 
             membership_degrees = np.array(membership_degrees)
+            print(f"memership degrees are : {membership_degrees}")
             cog = np.dot(membership_degrees, X) / np.sum(membership_degrees)
 
             return cog
 
-
-        X = np.arange(0, 1.0001, 1e-4)
+        X = np.arange(0, 2e-2, 1e-4)
         return COG(X, fuzzy_output)
-
-
 
     def inference(self, pm_fuzzy):
         """
@@ -248,7 +254,6 @@ class Fuzzy_Controller:
     def plot_pm(self):
         plt.plot(np.arange(0, self.N, 1), self.pm_history)
         plt.show()
-
 
 # testing
 # def main():

@@ -8,7 +8,8 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, function_config, mutation_rate=1e-3, plot_dir=None, max_gen=50, run_rga=30, controller=None,
+                 crossover_rate, function_config, mutation_rate=1e-3, plot_dir=None, max_gen=50, run_rga=30,
+                 controller=None,
                  gpc=5):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
@@ -142,7 +143,8 @@ class RGA:
             self.one_gen()
 
             # Updating p_m every k generation
-            self.pm = self.controller.control(cur_gen=generation, p_m=self.pm, cur_bsf=self.history['best_so_far'][generation])
+            self.pm = self.controller.control(cur_gen=generation, p_m=self.pm,
+                                              cur_bsf=self.history['best_so_far'][generation])
 
         # Saving fitness values of the last produced population
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
