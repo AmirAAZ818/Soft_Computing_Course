@@ -1,7 +1,7 @@
 import numpy as np
 import Membership_functions as mfs
 import matplotlib.pyplot as plt
-
+import os
 
 class Fuzzy_Controller:
 
@@ -44,26 +44,19 @@ class Fuzzy_Controller:
             return p_m
 
         # Logging pm
-        print(f"\/\/\//\//\//\//\/\/\/\/{cur_gen}")
 
         # Fuzzifying phase
         fuzzy_vars = self.fuzzifier(cur_gen=cur_gen, p_m=p_m, cur_bsf=cur_bsf)
-        print(f"fuzzy input vars are : {fuzzy_vars}")
 
         # Updating bsf and pm for the next control phase
         self.prev_bsf = cur_bsf
         self.prev_pm = p_m
-        # print(f"________cur gen is : {cur_gen}________")
-        # print(fuzzy_vars)
 
         pm_strengths = self.matching(fuzzy_vars=fuzzy_vars)
-        print(f"pm strengths : {pm_strengths}")
 
         pm_fuzzy_output = self.inference(pm_strengths)
-        print(f"fuzzy pm output : {pm_fuzzy_output}")
 
         crisp_pm = self.defuzzifier(pm_fuzzy_output)
-        print(f"crisp out put pm is  : {crisp_pm}")
 
         return crisp_pm
 
@@ -83,7 +76,6 @@ class Fuzzy_Controller:
                 membership_degrees.append(md)
 
             membership_degrees = np.array(membership_degrees)
-            print(f"memership degrees are : {membership_degrees}")
             cog = np.dot(membership_degrees, X) / np.sum(membership_degrees)
 
             return cog
@@ -101,7 +93,6 @@ class Fuzzy_Controller:
         """
         fuzzy_sets = list(pm_fuzzy.keys())
         fuzzy_output = {f_set: max(pm_fuzzy[f_set]) for f_set in fuzzy_sets}
-        # print(f"fuzzy output is : {fuzzy_output}")
         return fuzzy_output
 
     def matching(self, fuzzy_vars):
@@ -251,27 +242,16 @@ class Fuzzy_Controller:
         self.prev_pm = 0
         self.prev_bsf = 0
 
-    def plot_pm(self):
-        plt.plot(np.arange(0, self.N, 1), self.pm_history)
-        plt.show()
+    def plot_pm(self, dir):
+        plt.style.use('Solarize_Light2')
 
-# testing
-# def main():
-#     fcs = Fuzzy_Controller(101, 5)
-#     bsf_x = np.arange(1, 204, 2)
-#     bsf = np.square(bsf_x - 15)
-#
-#     # plt.plot(bsf_x, bsf)
-#     # plt.show()
-#     print(bsf)
-#     # pm = np.arange(1e-3, 0.01009, 9e-5)
-#     pm = 8e-3
-#     print(pm)
-#     # print(len(pm))
-#     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-#     for i in range(101):
-#         print(fcs.control(cur_gen=i, p_m=pm, cur_bsf=bsf[i]))
-#
-#
-# if __name__ == "__main__":
-#     main()
+        plt.plot(np.arange(0, self.N, 1), self.pm_history, label="Mutation Rate")
+        plt.title("Mutation Rate Plot")
+        plt.xlabel("Generation")
+        plt.ylabel("P_m")
+        plt.legend()
+
+        if dir is not None:
+            plt.savefig(os.path.join(dir, "P_m_RGA_plot.png"))
+
+        plt.show()

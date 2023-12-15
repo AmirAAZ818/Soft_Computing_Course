@@ -18,7 +18,7 @@ def main():
     rga_rastrigin = RGA(target_function=theorem.rastrigin, fitness_function=lambda x: 200 - theorem.rastrigin(x),
                         function_config=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
                                          {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
-                        crossover_rate=0.5, max_gen=300, population=300, run_rga=10, controller=Fuzzy_Controller, gpc=25)
+                        crossover_rate=0.5, max_gen=300, population=300, run_rga=1, controller=Fuzzy_Controller, gpc=20)
 
     rga_rastrigin.Run()
 

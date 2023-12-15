@@ -343,6 +343,7 @@ class RGA:
 
         plt.plot(x, y1, label="Average Mean Fitness", color="blue")
         plt.plot(x, y2, label="Average Best So Far", color="red", ls="--")
+        plt.xlabel("Generation")
 
         plt.legend()
         if self.plot_save_dir is not None:
@@ -352,4 +353,4 @@ class RGA:
 
         plt.show()
 
-        self.controller.plot_pm()
+        self.controller.plot_pm(dir=self.plot_save_dir)
