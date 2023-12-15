@@ -341,8 +341,8 @@ class RGA:
 
         def getaverage():
             n = self.runs
-            s = 0
             for i in range(self.controller.N):
+                s = 0
                 for j in range(n):
                     s += self.controller.pm_total_history[j][i]
                 self.controller.avg_pm.append(s / n)
