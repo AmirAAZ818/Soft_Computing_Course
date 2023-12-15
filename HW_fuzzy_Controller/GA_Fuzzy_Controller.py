@@ -3,24 +3,24 @@ import Membership_functions as mfs
 import matplotlib.pyplot as plt
 import os
 
+
 class Fuzzy_Controller:
 
     def __init__(self, max_gen, k):
         """
-
         :param max_gen: Maximum number of generations.
         :param k: The interval of each control action.
         Which will be used in the defuzzification phase
         when evaluating the crisp value from the fuzzy output.
+
         """
         self.N = max_gen
         self.k = k
         self.prev_bsf = 0
         self.prev_pm = 0
         self.pm_history = []
-        self.pm_total_history = [] # a matrix that saves history of pm in multipile runs
+        self.pm_total_history = []  # a matrix that saves history of pm in multiple runs
         self.avg_pm = []
-
 
         self.mf_pm = {"low": mfs.trapmf_maker([0, 1], 0, [0, 1e-3], 5e-3),
                       "avg": mfs.trimf_maker([0, 1], 1e-3, 5e-3, 1e-2),
