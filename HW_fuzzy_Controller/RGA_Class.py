@@ -120,6 +120,8 @@ class RGA:
     def reset(self):
         """This method empties the lists and values
         used for tracking the metrics for one fully run of the algorithm"""
+        if self.controller is not None:
+            self.controller.pm_history = []
 
         self.history['mean_fitness'] = []
         self.history['best_so_far'] = []
@@ -215,6 +217,9 @@ class RGA:
         self.history["mean_fitness"].append(sum(fitness_list) / len(fitness_list))
 
     def log_algo(self):
+        if self.controller is not None:
+            self.controller.pm_total_history.append(self.controller.pm_history)
+
         self.history["avg_mean_fitness"].append(self.history['mean_fitness'])
         self.history["avg_best_so_far"].append(self.history['best_so_far'])
 
@@ -333,6 +338,15 @@ class RGA:
         return tuple(fitness_values)
 
     def plot_info(self):
+
+        def getaverage():
+            n = self.runs
+            s = 0
+            for i in range(self.controller.N):
+                for j in range(n):
+                    s += self.controller.pm_total_history[j][i]
+                self.controller.avg_pm.append(s / n)
+        getaverage()
 
         plt.style.use('Solarize_Light2')
 

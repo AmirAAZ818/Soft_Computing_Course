@@ -18,6 +18,9 @@ class Fuzzy_Controller:
         self.prev_bsf = 0
         self.prev_pm = 0
         self.pm_history = []
+        self.pm_total_history = [] # a matrix that saves history of pm in multipile runs
+        self.avg_pm = []
+
 
         self.mf_pm = {"low": mfs.trapmf_maker([0, 1], 0, [0, 1e-3], 5e-3),
                       "avg": mfs.trimf_maker([0, 1], 1e-3, 5e-3, 1e-2),
@@ -245,7 +248,7 @@ class Fuzzy_Controller:
     def plot_pm(self, dir):
         plt.style.use('Solarize_Light2')
 
-        plt.plot(np.arange(0, self.N, 1), self.pm_history, label="Mutation Rate")
+        plt.plot(np.arange(0, self.N, 1), self.avg_pm, label="Mutation Rate")
         plt.title("Mutation Rate Plot")
         plt.xlabel("Generation")
         plt.ylabel("P_m")
