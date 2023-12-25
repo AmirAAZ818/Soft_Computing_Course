@@ -1,8 +1,6 @@
 from RGA_Class import RGA
 import theorem
-import random
 from GA_Fuzzy_Controller import Fuzzy_Controller
-import numpy as np
 
 
 def main():
