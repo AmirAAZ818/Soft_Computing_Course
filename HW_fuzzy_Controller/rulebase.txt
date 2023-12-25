@@ -1,0 +1,54 @@
+
+rule 1:
+if cm is high and pm(t-k) is low and generation is low then pm is average 
+
+rule 2:
+if cm is high and pm(t-k) is average and generation is low then pm is high 
+
+rule 3:
+if cm is high and pm(t-k) is high and generation is low then pm is low
+
+rule 4:
+if cm is low and pm(t-k) is low and generation is low then pm is low
+
+rule 5:
+if cm is low and pm(t-k) is average and generation is low then pm is low
+
+rule 6:
+if cm is low and pm(t-k) is high and generation is low then pm is average
+
+rule 7:
+if cm is high and pm(t-k) is low and generation is middle then pm is average 
+
+rule 8:
+if cm is high and pm(t-k) is average and generation is middle then pm is average 
+
+rule 9:
+if cm is high and pm(t-k) is high and generation is middle then pm is low
+
+rule 10:
+if cm is low and pm(t-k) is low and generation is middle then pm is average
+
+rule 11:
+if cm is low and pm(t-k) is average and generation is middle then pm is average
+
+rule 12:
+if cm is low and pm(t-k) is high and generation is middle then pm is high
+
+rule 13:
+if cm is high and pm(t-k) is low and generation is high then pm is average 
+
+rule 14:
+if cm is high and pm(t-k) is average and generation is high then pm is high 
+
+rule 15:
+if cm is high and pm(t-k) is high and generation is high then pm is low
+
+rule 16:
+if cm is low and pm(t-k) is low and generation is high then pm is average
+
+rule 17:
+if cm is low and pm(t-k) is average and generation is high then pm is high
+
+rule 18:
+if cm is low and pm(t-k) is high and generation is high then pm is average

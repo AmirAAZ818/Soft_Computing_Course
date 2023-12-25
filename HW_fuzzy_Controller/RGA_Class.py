@@ -8,7 +8,9 @@ import os
 class RGA:
 
     def __init__(self, target_function, fitness_function, population,
-                 crossover_rate, mutation_rate, function_config, plot_dir=None, max_gen=50, run_rga=30, controller=None):
+                 crossover_rate, function_config, mutation_rate=1e-3, plot_dir=None, max_gen=50, run_rga=30,
+                 controller=None,
+                 gpc=5):
 
         self.func_config = function_config  # a list of dicts containing boundary of each dimension : [{"low": a, "high":b}, ...]
         self.population_matrix = None
@@ -27,7 +29,9 @@ class RGA:
         self.best_answers = []  # best decoded value of the chromosomes found in each full run of the algorithm
         self.plot_save_dir = None if plot_dir is None else plot_dir
 
-        self.contorller = None if controller is None else controller
+        # Init controller
+        self.controller = None if controller is None else controller(max_gen=self.max_gen,
+                                                                     k=gpc)  # gpc = generation per control
 
     def print_parameters(self):
         # This is a method that prints parameters in tabular structure
@@ -37,7 +41,8 @@ class RGA:
             ["Population Size", self.population],
             ["CrossOver Rate", self.pc],
             ["Mutation Rate", self.pm],
-            ["Function Input Shape", self.dim]
+            ["Function Input Shape", self.dim],
+            ["Controller", "FCS" if self.controller is not None else "None"]
         ]
         print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
 
@@ -54,6 +59,10 @@ class RGA:
         for run in range(self.runs):
             # Reset the properties that were given values for one fully run of the algorithm
             self.reset()
+
+            # Reset the Controller states for the next fully run of the algorithm
+            if self.controller is not None:
+                self.controller.Reset()
 
             # Fully running the algorithm
             self.one_run()
@@ -111,6 +120,8 @@ class RGA:
     def reset(self):
         """This method empties the lists and values
         used for tracking the metrics for one fully run of the algorithm"""
+        if self.controller is not None:
+            self.controller.pm_history = []
 
         self.history['mean_fitness'] = []
         self.history['best_so_far'] = []
@@ -126,9 +137,16 @@ class RGA:
     def one_run(self):  # This method fully runs the algorithm once
         self.Random_population()  # Making random population
 
+        # Initial state of p_m for the start of the algorithm
+        self.pm = 1e-3 if self.controller is not None else self.pm
+
         # running the algorithm
         for generation in trange(self.max_gen):
             self.one_gen()
+
+            # Updating p_m every k generation
+            self.pm = self.controller.control(cur_gen=generation, p_m=self.pm,
+                                              cur_bsf=self.history['best_so_far'][generation])
 
         # Saving fitness values of the last produced population
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
@@ -138,8 +156,10 @@ class RGA:
         """This method produces one generation of the algorithm"""
 
         fitness_values = self.get_Fitness(chromosomes=self.population_matrix)
+
+        # to make sure there is no zero fittness value
         try:
-            assert min(fitness_values) >= 0  # to make sure there is no zero fittness value
+            assert min(fitness_values) >= 0
         except:
             print(f"Fitness value is negative : {min(fitness_values)}")
 
@@ -197,6 +217,9 @@ class RGA:
         self.history["mean_fitness"].append(sum(fitness_list) / len(fitness_list))
 
     def log_algo(self):
+        if self.controller is not None:
+            self.controller.pm_total_history.append(self.controller.pm_history)
+
         self.history["avg_mean_fitness"].append(self.history['mean_fitness'])
         self.history["avg_best_so_far"].append(self.history['best_so_far'])
 
@@ -295,7 +318,7 @@ class RGA:
                     l_bound = self.func_config[j]['low']
                     h_bound = self.func_config[j]['high']
                     mutation_mean = (h_bound + l_bound) / 2
-                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard # todo
+                    mutation_std = (h_bound - l_bound) / 4  # Mutation Standard
                     mutation_value = gauss(mu=mutation_mean, sigma=mutation_std)
                     mutation_value = max(min(mutation_value, h_bound),
                                          l_bound)  # Clip the value to be within the bounds
@@ -316,6 +339,15 @@ class RGA:
 
     def plot_info(self):
 
+        def getaverage():
+            n = self.runs
+            for i in range(self.controller.N):
+                s = 0
+                for j in range(n):
+                    s += self.controller.pm_total_history[j][i]
+                self.controller.avg_pm.append(s / n)
+        getaverage()
+
         plt.style.use('Solarize_Light2')
 
         # Plot of avg fitness
@@ -325,6 +357,7 @@ class RGA:
 
         plt.plot(x, y1, label="Average Mean Fitness", color="blue")
         plt.plot(x, y2, label="Average Best So Far", color="red", ls="--")
+        plt.xlabel("Generation")
 
         plt.legend()
         if self.plot_save_dir is not None:
@@ -333,3 +366,5 @@ class RGA:
             print(f"Plot Saved in : {self.plot_save_dir}")
 
         plt.show()
+
+        self.controller.plot_pm(dir=self.plot_save_dir)
