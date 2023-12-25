@@ -1,5 +1,3 @@
-import numpy
-
 
 def trimf_maker(domain, start, peak, end):
     """
