@@ -20,7 +20,7 @@ def main():
     # # Rastrigin Function
     # gsa_rastrigin = GSA(function=theorem.rastrigin, domain=[{'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12},
     #                                     {'low': -5.12, 'high': 5.12}, {'low': -5.12, 'high': 5.12}],
-    #                     function_dim=4, pop_size=300, ittration=100,epsilon=0.01, G=2, a=1, runs=1)
+    #                     function_dim=4, pop_size=50, ittration=25,epsilon=0.2, G=2, a=1.7, runs=4)
     # gsa_rastrigin.run()
 
 

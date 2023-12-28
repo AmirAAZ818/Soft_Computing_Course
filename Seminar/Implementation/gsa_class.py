@@ -24,7 +24,7 @@ class GSA:
         self.epsilon = epsilon # amount of shift from distance(used in force formula)
         self.posations = self.initial_posations() # matrix of posation
         self.fits = [0 for _ in  range(self.population_size)]
-        self.best = 1
+        self.best = 0
         self.worst = 0
         self.bests = []
         self.avg_fits = []
@@ -32,6 +32,7 @@ class GSA:
         self.avg_fits_of_runs = []
         self.best_position = None
         self.best_positions = []
+        self.total_best=[self.bound[0]['high'], self.best_position]
 
     # this method creats a random matrix (size population size x dim) and return the matrix
     def initial_posations(self):
@@ -53,10 +54,11 @@ class GSA:
             self.one_run()
             self.log_algo()
 
-        print(f'Best Value In Last Run: {self.best}')
-        print(f'Best Position In Last Run: {self.best_position}')
+        print(f'Best Value : {self.total_best[0]}')
+        print(f'Best Position : {self.total_best[1]}')
         self.plot()
 
+    # this method, calls methods for each step of algorithm for itters time.
     def one_run(self):
         for i in range(self.itters):
             self.t = i
@@ -69,7 +71,6 @@ class GSA:
             self.update_mess()
             self.log_one_run()
             
-    
     def get_fitness(self):
         for i in range(self.population_size):
             x = self.function(self.posations[i])
@@ -112,11 +113,13 @@ class GSA:
     def calculate_position(self):
         for i in range(self.population_size):
             for j in range(self.dim):
-                self.posations[i][j] += self.velacity[i][j]
+                # self.posations[i][j] += self.velacity[i][j]
                 # if self.posations[i][j] < self.bound[j]['low'] :
                 #     self.posations[i][j] = self.bound[j]['low']
                 # if self.posations[i][j] > self.bound[j]['high']:
                 #     self.posations[i][j] = self.bound[j]['high']
+                x = self.posations[i][j] + self.velacity[i][j]
+                self.posations[i][j] = x if (x < self.bound[j]['high'] and x > self.bound[j]['low']) else self.posations[i][j]
                 
 
     
@@ -141,6 +144,15 @@ class GSA:
             self.worst = min(self.fits)
         indx = self.fits.index(self.best)
         self.best_position = self.posations[indx]
+        if self.minimize:
+            if self.total_best[0] > self.best:
+                self.total_best[0] = self.best
+                self.total_best[1] = self.best_position
+        else:
+            if self.total_best[0] < self.best:
+                self.total_best[0] = self.best
+                self.total_best[1] = self.best_position
+
 
     def log_one_run(self):
         self.bests.append(self.best)
