@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 class GSA:
 
-    def __init__(self, function, domain, function_dim, pop_size, ittration, epsilon, G, a, runs, minimize=True):
+    def __init__(self, function, domain, function_dim, pop_size, ittration, k, G, a, runs, minimize=True):
         self.function = function
         self.runs = runs
         self.bound = domain
@@ -21,7 +21,7 @@ class GSA:
         self.accelerate = [[0 for _ in range(self.dim)] for _ in range(self.population_size)]
         self.velacity = [[0 for _ in range(self.dim)] for _ in range(self.population_size)]
         self.forces = [[0 for _ in range(self.dim)] for _ in range(self.population_size)] # matrix of forces, value of [i][j] means force of the agent i in the j diminstion 
-        self.epsilon = epsilon # amount of shift from distance(used in force formula)
+        self.K = k
         self.posations = self.initial_posations() # matrix of posation
         self.fits = [0 for _ in  range(self.population_size)]
         self.best = 0
@@ -85,15 +85,30 @@ class GSA:
 
     # this function is the implemantation of force furmola 
     def calculate_force(self):
+        fits = self.fits.copy()
+        kbests = []
+        for i in range(self.K):
+            if self.minimize:
+                m = min(fits)
+                fits.remove(m)
+                indx = self.fits.index(m)
+                kbests.append(indx)
+            else:
+                m = max(fits)
+                fits.remove(m)
+                indx = self.fits.index(m)
+                kbests.append(indx)
+
         for i in range(self.population_size):
             for j in range(self.dim):
                 f = 0
-                for k in  range(self.population_size):
-                    if k == j :
+                totalforce = 0
+                for k in kbests:
+                    if k == i :
                         totalforce = 0
                     else:
                         r = self.distance(i, k)
-                        f = (self.G * ((self.mess[i] * self.mess[k]) / (r + self.epsilon)) * 
+                        f = (self.G * ((self.mess[i] * self.mess[k]) / (r + 0.001)) * 
                               (self.posations[k][j] - self.posations[i][j]))
                         totalforce = totalforce + random.random() * f
                 self.forces[i][j]= totalforce
