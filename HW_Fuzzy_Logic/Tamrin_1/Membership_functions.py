@@ -16,7 +16,7 @@ def trimf_maker(domain, start, peak, end):
 
     def trimf(x):
         assert domain[0] <= x <= domain[1], "x is not in domain range!"
-        if x <= start or x >= end:
+        if domain[0] <= x <= start or domain[1] >= x >= end:
             return 0
 
         if x == peak:
