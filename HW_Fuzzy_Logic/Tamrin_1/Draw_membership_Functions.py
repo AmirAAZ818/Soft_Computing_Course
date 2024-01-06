@@ -6,10 +6,7 @@ import os
 """
     Run this file for testing and drawing the membership functions (Question 1, part 4)
 """
-
-
-# 1.4
-
+# GUI Terminal Methods
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -21,27 +18,35 @@ red = '\033[91m'
 magenta = '\033[95m'
 cyan = '\033[96m'
 
-# start of the program
+# 1.4
 
+def gen_num(domain):
+    domain[]
+
+
+
+# start of the program
 if __name__ == "__main__":
     clear_screen()
-    print("\n\n\n\n\n\n\n\n\n")
-    print(blue + "|________________________________________________________|" + reset)
-    print(blue + "| Welcome to our Homemade Membership Function Drawer :)  |")
-    print(blue + "|________________________________________________________|" + reset)
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print(blue + "                                                  |________________________________________________________|" + reset)
+    print(blue + "                                                  | Welcome to our Homemade Membership Function Drawer :)  |")
+    print(blue + "                                                  |________________________________________________________|" + reset)
 
     # cleaning the screen
     time.sleep(2)
     clear_screen()
 
-    print(cyan + "                                      \/\/\/\/\/ Please Choose a Membership function to draw \/\/\/\/\/" + reset + '\n')
+    print(cyan + "                                          \/\/\/\/\/ Please Choose a Membership function to draw \/\/\/\/\/" + reset + '\n')
 
-    print(red + "1. Triangle Membership Function")
-    print("2. Triangle Membership Function" + reset)
+    print(red + "1. Triangle Membership Function\n")
+    print("2. Triangle Membership Function" + reset + '\n')
 
-    option = input(magenta + "Waiting for your Input: " + reset)
+    opt = input(magenta + "Waiting for your Input: " + reset)
 
     time.sleep(2)
     clear_screen()
 
-    print("It was all a lie :)")
+    if opt=='1':
+
+
