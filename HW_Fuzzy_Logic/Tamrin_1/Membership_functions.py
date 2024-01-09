@@ -1,5 +1,4 @@
 
-
 # 1.4 (Membership Function Definition)
 def trimf_maker(domain, start, peak, end):
     """
@@ -45,6 +44,7 @@ def trimf_maker(domain, start, peak, end):
 
 def trapmf_maker(domain, start, peak, end):
     """
+    this function returns a method that is a trapmf on the domain of X.
     :param domain: 1d array of len 2
     :param start: the starting point
     :param peak:  1d array of len 2, showing the len of the peak value
@@ -78,3 +78,28 @@ def trapmf_maker(domain, start, peak, end):
             return res
 
     return trapmf
+
+def Q1mf_maker(l, r):
+    """
+    This Function takes arguments l and r, and is responsible for making the asked membership function and returning it.
+    :param l:
+    :param r:
+    :return: A method which is our membership function with the desired arguments.
+    """
+    assert l < r, "l and r are equal!"
+
+    def mf(x):
+        if x <= l:
+            return 1
+
+        elif x > r:
+            return 0
+
+        elif l < x <= ((l + r) / 2):
+            return 1 - 2 * (((x - l ) /(r - l)) ** 2)
+
+        elif ((l + r) / 2) < x <= r:
+            return 2 * (((r - x)/(r - l)) ** 2)
+
+
+    return mf
