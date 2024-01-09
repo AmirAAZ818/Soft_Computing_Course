@@ -3,6 +3,7 @@ import numpy as np
 import time
 import os
 import Membership_functions as mf
+from random import random, uniform, randint
 
 """
     Run this file for testing and drawing the membership functions (Question 1, part 4)
@@ -10,7 +11,8 @@ import Membership_functions as mf
 
 
 # GUI Terminal Methods
-def clear_screen():
+def clear_screen(sleep=1):
+    time.sleep(sleep)
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
@@ -22,11 +24,11 @@ magenta = '\033[95m'
 cyan = '\033[96m'
 
 
-# 1.4
+# Question 1
 def plot(x, y, name):
-    plt.style.use('bmh')
 
     plt.plot(x, y, color='b', label=name)
+    plt.title(name)
     plt.legend()
     plt.show()
 
@@ -43,7 +45,6 @@ if __name__ == "__main__":
         blue + "                                                  |________________________________________________________|" + reset)
 
     # cleaning the screen
-    time.sleep(1)
     clear_screen()
 
     print(
@@ -55,33 +56,86 @@ if __name__ == "__main__":
 
     opt = input(magenta + "Waiting for your Input: " + reset)
 
-    time.sleep(1)
+    # cleaning the screen
     clear_screen()
+
+    # Setting style of the plots
+    plt.style.use('bmh')
+
 
     if opt == '1':
 
-        print(magenta + "Please Enter l and r For the Asked Membership Function")
+        # Deciding the mode of Plotting (Random Plotting or Getting l and r from user and plotting it)
+        print(red + "1. User plotting Mode" + "\n")
+        print("2. Computer Plotting Mode" + reset + '\n')
 
-        flag = True
-        while flag:
-            print('\n' + red + "Note: Write it in this format: l[space]r " + reset + '\n')
-            args = tuple(map(float, input("Type: ").split()))
-            l, r = args
-            if len(args) != 2:
-                print(red + "Check the Format and Try Again!" + reset)
-                continue
+        u_mode = False
+        c_mode = False
 
-            if l >= r:
-                print(red + "l and r are not written in the right order" + reset)
-            flag = False    
+        inp = input("Choose: ")
 
-        # -------------------- The Actual code you may want to check --------------------
-        mf = mf.Q1mf_maker(l=l, r=r)
+        if inp == '1':
+            u_mode = True
+        elif inp == '2':
+            c_mode = True
+        else:
+            print(red + "There is only two modes available" + reset)
 
-        X = np.linspace(start=l - 10, stop=r + 10, num=int(l - r + 50))
-        Y = np.array([mf(x) for x in X])
+            # cleaning the screen
+            clear_screen()
+        if u_mode:
+            print(magenta + "Please Enter l and r For the Asked Membership Function")
 
-        plot(X, Y, "Question 1 Membership Function")
+            flag = True
+            while flag:
+                print('\n' + red + "Note: Write it in this format: l[space]r " + reset + '\n')
+                args = tuple(map(float, input("Type: ").split()))
+                l, r = args
+                if len(args) != 2:
+                    print(red + "Check the Format and Try Again!" + reset)
+                    continue
+
+                if l >= r:
+                    print(red + "l and r are not written in the right order" + reset)
+                flag = False
+
+            # -------------------- The Actual code you may want to check --------------------
+            # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%    1.1    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            curvemf = mf.Q1mf_maker(l=l, r=r)
+            X = np.linspace(start=l - 10, stop=r + 10, num=int(l - r + 50))
+            Y = np.array([curvemf(x) for x in X])
+            plot(X, Y, "Question 1 Membership Function")
+
+
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%    1.2    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # Plotting the Membership Function
+        elif c_mode:
+            # init figure
+            fig, axs = plt.subplots(2, 3, figsize=(10, 6))
+
+            # ploting each function with random r and l
+            num = 1
+            for i in range(2):
+                for j in range(3):
+                    # Generating l and r
+                    l = round(randint(0, 30) - random(), 3)
+                    r = round(l + randint(1, 30) + random(), 3)
+
+                    # Making the membership function
+                    curvemf = mf.Q1mf_maker(l=l, r=r)
+                    X = np.linspace(start=l - 10, stop=r + 10, num=int(l - r + 50))
+                    Y = np.array([curvemf(x) for x in X])
+
+                    # Plotting
+                    axs[i, j].plot(X, Y, color='r')
+                    axs[i, j].set_title(f'Plot Num. {num}')
+                    axs[i, j].text(0.95, 0.95, f"r = {r}" + "\n" + f"l = {l}", transform=axs[i, j].transAxes, fontsize=10, color='blue', ha='right', va='top')
+
+                    num += 1
+
+            plt.tight_layout()
+            plt.show()
+
         # -------------------- End of he Actual code you may want to check --------------------
 
 

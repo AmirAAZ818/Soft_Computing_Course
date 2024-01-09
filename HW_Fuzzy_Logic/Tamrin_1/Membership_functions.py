@@ -1,4 +1,3 @@
-
 # 1.4 (Membership Function Definition)
 def trimf_maker(domain, start, peak, end):
     """
@@ -19,10 +18,8 @@ def trimf_maker(domain, start, peak, end):
         if x == peak:
             return 1
 
-
         if x <= start or x >= end:
             return 0
-
 
         before_peak_slope = 1 / (peak - start) if peak != start else 0
         after_peak_slope = 1 / (peak - end) if peak != end else 0
@@ -79,6 +76,7 @@ def trapmf_maker(domain, start, peak, end):
 
     return trapmf
 
+
 def Q1mf_maker(l, r):
     """
     This Function takes arguments l and r, and is responsible for making the asked membership function and returning it.
@@ -96,10 +94,9 @@ def Q1mf_maker(l, r):
             return 0
 
         elif l < x <= ((l + r) / 2):
-            return 1 - 2 * (((x - l ) /(r - l)) ** 2)
+            return 1 - 2 * (((x - l) / (r - l)) ** 2)
 
         elif ((l + r) / 2) < x <= r:
-            return 2 * (((r - x)/(r - l)) ** 2)
-
+            return 2 * (((r - x) / (r - l)) ** 2)
 
     return mf
