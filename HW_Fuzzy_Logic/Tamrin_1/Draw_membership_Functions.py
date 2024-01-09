@@ -46,45 +46,115 @@ if __name__ == "__main__":
     print(
         cyan + r"                                          \/\/\/\/\/ Please Choose a Membership function to draw \/\/\/\/\/" + reset + '\n')
 
-    print(red + "1. Triangle Membership Function\n")
-    print("2. Trap Membership Function" + reset + '\n')
+    print(red + "1. Asked Membership Function (Question 1)\n")
+    print("2. Triangle Membership Function\n")
+    print("3. Trapezoid Membership Function" + reset + '\n')
 
     opt = input(magenta + "Waiting for your Input: " + reset)
 
     time.sleep(1)
     clear_screen()
 
+    # Triangle Drawing Option
     if opt=='1':
+
+        print(magenta + "Please Enter a Domain For Triangle Membership Function " )
 
         flag = True
         while flag:
-            print(
-                magenta + "Please Enter a Domain For Triangle Membership Function " + red + "Note: Write it in this format: start[space]end " + reset + '\n')
-            d = tuple(map(int, input("Domain: ").split()))
-            assert len(d) == 2, red + "Check the format and try again!" + reset
-            assert d[0] < d[1], red + "Start was not less than end, please enter the domain again!" + reset
+
+            print('\n' + red + "Note: Write it in this format: Start[space]End " + reset + '\n')
+            d = tuple(map(float, input("Type: ").split()))
+
+            if len(d) != 2:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            if d[0] > d[1] :
+                print(red + "Start was not less than End, please enter the domain again!" + reset)
+                continue
+
             flag = False
 
         print("\n" + "_______________________________________________________" + "\n")
-        print("Please enter the start, Peak and end point of the Triangle")
+        print("Please enter the Start, Peak and End point of the Triangle")
 
         flag = True
         while flag:
-            print(
-                magenta + "Please enter the start, Peak and end point of the Triangle " + red + "Note: Write it in this format: start[space]peak[space]end " + reset + '\n')
-            points = tuple(map(int, input("Domain: ").split()))
-            assert len(points) == 3, red + "Check the format and try again!" + reset
-            assert points[0] < points[1] < points[2], red + "Check the format and try again!" + reset
+            print('\n' + red + "Note: Write it in this format: start[space]peak[space]end " + reset + '\n')
+            points = tuple(map(float, input("Type: ").split()))
+            if (d[0] > points[0]) or (d[1] < points[2]):
+                print(red + "Start or End are not in the domain, check your values!")
+                continue
+
+            if len(points) != 3:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            if (points[0] > points[1]) or (points[1] > points[2]):
+                print(red + "Values are not in order" + reset)
+                continue
+
             flag = False
 
+        # -------------------- The Actual code you may want to check --------------------
         trimmf = mf.trimf_maker(d, points[0], points[1], points[2])
 
-        # X = np.linspace(start=d[0], stop=d[1], num=50)
-        X = np.arange(d[0], d[1], 0.1)
+        X = np.linspace(start=d[0], stop=d[1], num=100)
         Y = np.array([trimmf(x) for x in X])
-        print(Y)
 
         plot(X, Y, "Triangle Membership Function")
+        # -------------------- End of he Actual code you may want to check --------------------
+
+        # Trapezoid Drawing Option
+    elif opt == '2':
+
+        print(magenta + "Please Enter a Domain For Trapezoid Membership Function ")
+        flag = True
+        while flag:
+
+            print('\n' + red + "Note: Write it in this format: Start[space]End " + reset + '\n')
+            d = tuple(map(float, input("Type: ").split()))
+
+            if len(d) != 2:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            if d[0] > d[1]:
+                print(red + "Start was not less than End, please enter the domain again!" + reset)
+                continue
+
+            flag = False
+
+        print("\n" + "_______________________________________________________" + "\n")
+        print("Please enter the Start, Peak and End point of the Membership Fucntion")
+
+        flag = True
+        while flag:
+            print('\n' + red + "Note: Write it in this format: Start[space]Peak_start[space]Peak_end[space]End " + reset + '\n')
+            points = tuple(map(float, input("Type: ").split()))
+            if (d[0] > points[0]) or (d[1] < points[3]):
+                print(red + "Start or End are not in the domain, check your values!")
+                continue
+
+            if len(points) != 4:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            if (points[0] > points[1]) or (points[1] > points[2]) or (points[2] > points[3]):
+                print(red + "Values are not in order" + reset)
+                continue
+
+            flag = False
+
+        # -------------------- The Actual code you may want to check --------------------
+        trapmf = mf.trapmf_maker(d, points[0], (points[1], points[2]),points[3])
+
+        X = np.linspace(start=d[0], stop=d[1], num=100)
+        Y = np.array([trapmf(x) for x in X])
+
+        plot(X, Y, "Trapezoid Membership Function")
+        # -------------------- End of he Actual code you may want to check --------------------
 
 
 
