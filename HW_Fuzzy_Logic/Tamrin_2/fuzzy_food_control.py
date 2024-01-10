@@ -1,4 +1,4 @@
-from functions import *
+from HW_Fuzzy_Logic.Tamrin_2.functions import *
 import numpy as np
 
 class Fuzzy_food_control:
