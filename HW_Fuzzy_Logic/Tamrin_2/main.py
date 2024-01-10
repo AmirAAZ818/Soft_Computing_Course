@@ -1,4 +1,4 @@
-from ex2 import *
+from HW_Fuzzy_Logic.Tamrin_2.fuzzy_food_control import *
 
 def get_inputs():
     t = int(input('degree: '))
