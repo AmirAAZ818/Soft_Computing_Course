@@ -10,5 +10,5 @@ def main():
     food = get_inputs()
     food.run()
 
-
-main()
+if __name__ == '__main__':
+    main()
