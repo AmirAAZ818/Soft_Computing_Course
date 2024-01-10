@@ -17,7 +17,7 @@ class Fuzzy_food_control:
         a = self.matching(c)
         b = self.inference(a)
         x = self.defuzzify(b)
-        print(x)
+        print(f'Requierd time : {x}')
 
     def fuzzify_res(self, x):
         tooshort = self.resultdef['tooshort'](x)
@@ -196,8 +196,8 @@ class Fuzzy_food_control:
             membership_degrees = np.array(membership_degrees)
 
             cog = np.dot(membership_degrees, X) / np.sum(membership_degrees)
-
             return cog
 
         X = np.arange(0,100,0.001) 
         return COG(X, fuzzy_output)
+    
