@@ -1,4 +1,4 @@
-from ex2 import *
+from HW_Fuzzy_Logic.ex2 import *
 
 def get_inputs():
     t = int(input('degree: '))
