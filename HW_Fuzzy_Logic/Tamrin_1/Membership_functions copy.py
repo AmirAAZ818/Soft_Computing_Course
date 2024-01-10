@@ -24,13 +24,13 @@ def trimf_maker(domain, start, peak, end):
         after_peak_slope = 1 / (peak - end) if peak != end else 0
 
         if x < peak:
-            before_bias = -(start - domain[0]) * before_peak_slope
+            before_bias = -start * before_peak_slope
             res = (before_peak_slope * x) + before_bias
 
             return res
 
         if x > peak:
-            after_bias = -(end - domain[0]) * after_peak_slope
+            after_bias = -end * after_peak_slope
             res = (after_peak_slope * x) + after_bias
 
             return res
@@ -61,13 +61,13 @@ def trapmf_maker(domain, start, peak, end):
         after_peak_slope = 1 / (peak[1] - end) if peak[1] != end else 0
 
         if x < peak[0]:
-            before_bias = -(start - domain[0]) * before_peak_slope
+            before_bias = -start * before_peak_slope
             res = (before_peak_slope * x) + before_bias
 
             return res
 
         if x > peak[1]:
-            after_bias = -(end - domain[0]) * after_peak_slope
+            after_bias = -end * after_peak_slope
             res = (after_peak_slope * x) + after_bias
 
             return res
