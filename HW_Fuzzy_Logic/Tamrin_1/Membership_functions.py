@@ -1,3 +1,6 @@
+import math
+
+
 # 1.4 (Membership Function Definition)
 def trimf_maker(domain, start, peak, end):
     """
@@ -75,6 +78,20 @@ def trapmf_maker(domain, start, peak, end):
             return res
 
     return trapmf
+
+
+def Gaussian_maker(m, s):
+    """
+    Ths method makes a membership function that is a bell with the desired a, b, c
+    :param m: mean
+    :param s: sigma
+    :return: A gaussian membership function.
+    """
+
+    def g_mf(x):
+        return math.exp(-(x - m)**2 / (2 * s**2))
+
+    return g_mf
 
 
 def Q1mf_maker(l, r):

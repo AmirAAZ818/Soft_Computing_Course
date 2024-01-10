@@ -27,11 +27,24 @@ cyan = '\033[96m'
 # Question 1
 def plot(x, y, name):
 
-    plt.plot(x, y, color='b', label=name)
+    plt.plot(x, y, color='b')
     plt.title(name)
     plt.legend()
-    plt.show()
 
+
+def Crossover_points(X, Y):
+    """
+    A method that finds cross over point of the asked function
+    :param X:
+    :param Y:
+    :return: A tuple of len 2, (CrossOver Points, Membership Values)
+    """
+    # Finding CrossOver Points
+    idx = np.argmin(np.abs(Y - 0.5))  # Finding Closest number to 0.5
+    crossover_point = np.array([X[idx]])
+    membership_value = np.array(Y[idx])
+
+    return crossover_point, membership_value
 
 # start of the program
 if __name__ == "__main__":
@@ -102,9 +115,16 @@ if __name__ == "__main__":
             # -------------------- The Actual code you may want to check --------------------
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%    1.1    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             curvemf = mf.Q1mf_maker(l=l, r=r)
-            X = np.linspace(start=l - 10, stop=r + 10, num=int(l - r + 50))
+            X = np.linspace(start=l - 10, stop=r + 10, num=int(abs(l - r) + 50))
             Y = np.array([curvemf(x) for x in X])
+
+            crp, mship_val = Crossover_points(X, Y)
+
             plot(X, Y, "Question 1 Membership Function")
+
+            plt.scatter(crp, mship_val, color='red', label="Crossover Point")
+            plt.text(2, 0.95, f"CrossOver Points = {crp}", fontsize=10, color='green', ha='right', va='top')
+            plt.show()
 
 
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%    1.2    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -123,16 +143,23 @@ if __name__ == "__main__":
 
                     # Making the membership function
                     curvemf = mf.Q1mf_maker(l=l, r=r)
-                    X = np.linspace(start=l - 10, stop=r + 10, num=int(l - r + 50))
+                    X = np.linspace(start=l - 10, stop=r + 10, num=int(abs(r - l) + 50))
                     Y = np.array([curvemf(x) for x in X])
 
-                    # Plotting
-                    axs[i, j].plot(X, Y, color='r')
+                    # Finding and scattering CrossOverPoints
+                    crp_x, membership_value = Crossover_points(X, Y)
+                    axs[i, j].scatter(crp_x, membership_value, color='red', label="Crossover Point")
+
+                    # Plotting membership function
+                    axs[i, j].plot(X, Y, color='blue')
                     axs[i, j].set_title(f'Plot Num. {num}')
-                    axs[i, j].text(0.95, 0.95, f"r = {r}" + "\n" + f"l = {l}", transform=axs[i, j].transAxes, fontsize=10, color='blue', ha='right', va='top')
+                    axs[i, j].text(0.95, 0.95, f"r = {r}" + "\n" + f"l = {l}" + '\n' + f"CrossOver Points = {crp_x}", transform=axs[i, j].transAxes,
+                                   fontsize=6, color='green', ha='right', va='top')
+
 
                     num += 1
 
+            plt.legend(loc='upper right', bbox_to_anchor=(0.5, -0.2), fancybox=True, shadow=True, ncol=4)
             plt.tight_layout()
             plt.show()
 
@@ -161,7 +188,7 @@ if __name__ == "__main__":
             flag = False
 
         print("\n" + "_______________________________________________________" + "\n")
-        print("Please enter the Start, Peak and End point of the Triangle")
+        print(magenta + "Please enter the Start, Peak and End point of the Triangle")
 
         flag = True
         while flag:
@@ -188,6 +215,7 @@ if __name__ == "__main__":
         Y = np.array([trimmf(x) for x in X])
 
         plot(X, Y, "Triangle Membership Function")
+        plt.show()
         # -------------------- End of he Actual code you may want to check --------------------
 
         # Trapezoid Drawing Option
@@ -239,4 +267,32 @@ if __name__ == "__main__":
         Y = np.array([trapmf(x) for x in X])
 
         plot(X, Y, "Trapezoid Membership Function")
+        plt.show()
+        # -------------------- End of he Actual code you may want to check --------------------
+
+
+    elif opt == '4':
+
+        print(magenta + "Please Enter a Domain For Gaussian Membership Function ")
+        flag = True
+        while flag:
+
+            print('\n' + red + "Note: Write it in this format: mean[space]sigma " + reset + '\n')
+            args = tuple(map(float, input("Type: ").split()))
+            mean = args[0]
+            sigma = args[1]
+            if len(args) != 2:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            flag = False
+
+        # -------------------- The Actual code you may want to check --------------------
+        g_mf = mf.Gaussian_maker(mean, sigma)
+
+        X = np.linspace(start=50 + mean, stop=mean - 50, num=200)
+        Y = np.array([g_mf(x) for x in X])
+
+        plot(X, Y, "Gaussian Membership Function")
+        plt.show()
         # -------------------- End of he Actual code you may want to check --------------------
