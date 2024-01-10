@@ -65,7 +65,10 @@ if __name__ == "__main__":
 
     print(red + "1. Asked Membership Function (Question 1)\n")
     print("2. Triangle Membership Function\n")
-    print("3. Trapezoid Membership Function" + reset + '\n')
+    print("3. Trapezoid Membership Function" + '\n')
+    print("4. Gaussian Membership Function" + '\n')
+    print("5. Sigmoid Membership Function" + reset + '\n')
+
 
     opt = input(magenta + "Waiting for your Input: " + reset)
 
@@ -273,7 +276,7 @@ if __name__ == "__main__":
 
     elif opt == '4':
 
-        print(magenta + "Please Enter a Domain For Gaussian Membership Function ")
+        print(magenta + "Please Enter parameters For Gaussian Membership Function ")
         flag = True
         while flag:
 
@@ -294,5 +297,32 @@ if __name__ == "__main__":
         Y = np.array([g_mf(x) for x in X])
 
         plot(X, Y, "Gaussian Membership Function")
+        plt.show()
+        # -------------------- End of he Actual code you may want to check --------------------
+
+    elif opt == '5':
+
+        print(magenta + "Please Enter parameters For Sigmoid Membership Function ")
+        flag = True
+        while flag:
+
+            print('\n' + red + "Note: Write it in this format: a[space]c " + reset + '\n')
+            args = tuple(map(float, input("Type: ").split()))
+            a = args[0]
+            c = args[1]
+            if len(args) != 2:
+                print(red + "Check the Format and Try Again!" + reset)
+                continue
+
+            flag = False
+
+        # -------------------- The Actual code you may want to check --------------------
+        sig_mf = mf.Sigmoid_maker(a, c)
+
+
+        X = np.linspace(start=10 + c, stop=c - 10, num=120)
+        Y = np.array([sig_mf(x) for x in X])
+
+        plot(X, Y, "Sigmoid Membership Function")
         plt.show()
         # -------------------- End of he Actual code you may want to check --------------------

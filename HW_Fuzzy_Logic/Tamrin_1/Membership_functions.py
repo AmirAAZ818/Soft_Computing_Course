@@ -94,6 +94,19 @@ def Gaussian_maker(m, s):
     return g_mf
 
 
+def Sigmoid_maker(a, c):
+    """
+    Ths method makes a sigmoid membership function with parameters a and c
+    :param a: 
+    :param c: 
+    :return: A sigmoid membership function
+    """
+
+    def sig_mf(x):
+        return (1 /(1 + math.exp(-a * (x - c))))
+
+    return sig_mf
+
 def Q1mf_maker(l, r):
     """
     This Function takes arguments l and r, and is responsible for making the asked membership function and returning it.
