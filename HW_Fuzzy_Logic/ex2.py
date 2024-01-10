@@ -1,4 +1,4 @@
-from Membership_functions import *
+from functions import *
 import numpy as np
 
 class Fuzzy_food_control:
@@ -196,7 +196,8 @@ class Fuzzy_food_control:
         fuzzy_sets = list(membership_rules.keys())
         fuzzy_output ={}
         for f_set in fuzzy_sets:
-            fuzzy_output[f_set] = max(membership_rules[f_set])
+            if membership_rules[f_set] != []:
+                fuzzy_output[f_set] = max(membership_rules[f_set])
 
         return fuzzy_output
 
