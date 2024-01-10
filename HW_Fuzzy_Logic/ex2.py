@@ -207,11 +207,11 @@ class Fuzzy_food_control:
         def COG(X, f_output):
             membership_degrees = []
             for x in X:
+                f_sets = list(f_output.keys())
                 f_var = self.fuzzify_res(x)
-                md = max(min(f_output['tooshort'], f_var['tooshort']), min(f_output['short'], f_var['short']),
-                         min(f_output['medium'], f_var['medium']), min(f_output['long'], f_var['long']),
-                         min(f_output['toolong'], f_var['toolong']))
-                membership_degrees.append(md)
+                for key in f_sets:
+                    md = max(f_output[key], f_var[key])
+                    membership_degrees.append(md)
 
             membership_degrees = np.array(membership_degrees)
             cog = np.dot(membership_degrees, X) / np.sum(membership_degrees)
