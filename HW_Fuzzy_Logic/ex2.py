@@ -31,42 +31,27 @@ class Fuzzy_food_control:
     def fuzzify(self):
 
         def temp(t):
-            degress = {'low':0, 'average':0, 'high':0}
-            degress['low'] = (50 - t) / 50
-            if t < 50:
-                degress['average'] = t / 50
-            else:
-                degress['average'] = (100 - t) / 50
-            degress['high'] = (t - 50) / 50
 
+            flow = trimf_maker(domain=[0,100],start=0, peak=0, end=50)
+            favg = trimf_maker(domain=[0,100], start=0, peak=50, end=100)
+            fhigh = trimf_maker(domain=[0,100],start=50, peak=100, end=100)
+            degress = {'low':flow(t), 'average':favg(t), 'high':fhigh(t)}
             return degress
         
         def volume(v):
 
-            degrees = {'little':0, 'medium':0, 'big':0}
-            degrees['little'] = (500 - v) / 500
-
-            if v < 500:
-                degrees['medium'] = v / 500
-            else:
-                degrees['medium'] = (1000 - v) / 500
-
-            degrees['big'] = (v - 500) / 500
-
+            flittle = trimf_maker(domain=[0,1000],start=0, peak=0, end=500)
+            fmedium = trimf_maker(domain=[0,1000], start=0, peak=500, end=1000)
+            fbig = trimf_maker(domain=[0,1000],start=500, peak=1000, end=1000)
+            degrees = {'little':flittle(v), 'medium':fmedium(v), 'big':fbig(v)}
             return degrees
         
         def transmisiin(c):
-            degress = {'low':0, 'average':0, 'high':0}
 
-            degress['low'] = (50 - c) / 50
-
-            if c < 50:
-                degress['average'] = c / 50
-            else:
-                degress['average'] = (100 - c) / 50
-
-            degress['high'] = (c - 50) / 50
-
+            flow = trimf_maker(domain=[0,100],start=0, peak=0, end=50)
+            favg = trimf_maker(domain=[0,100], start=0, peak=50, end=100)
+            fhigh = trimf_maker(domain=[0,100],start=50, peak=100, end=100)
+            degress = {'low':flow(c), 'average':favg(c), 'high':fhigh(c)}
             return degress
 
         tempdegress = temp(t=self.t)
