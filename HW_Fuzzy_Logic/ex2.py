@@ -199,5 +199,5 @@ class Fuzzy_food_control:
 
             return cog
 
-        X = np.arange(0,100,2) # change this later
+        X = np.arange(0,100,0.001) 
         return COG(X, fuzzy_output)
