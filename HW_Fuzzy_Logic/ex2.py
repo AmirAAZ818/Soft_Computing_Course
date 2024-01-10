@@ -6,13 +6,11 @@ class Fuzzy_food_control:
         self.t = temp
         self.v = vol
         self.c = tc
-        self.degrees = None
         self.resultdef = {'tooshort': trimf_maker(domain=[0,100], start=0, peak=0, end=25)
                      , 'short':trimf_maker(domain=[0,100], start=0, peak=25, end=50),
                        'medium':trimf_maker(domain=[0,100], start=25, peak=50, end=75)
                        , 'long':trimf_maker(domain=[0,100], start=50, peak=75, end=100)
                        , 'toolong':trimf_maker(domain=[0,100], start=75, peak=100, end=100)}
-
 
     def run(self):
         c = self.fuzzify()
@@ -20,7 +18,6 @@ class Fuzzy_food_control:
         b = self.inference(a)
         x = self.defuzzify(b)
         print(x)
-
 
     def fuzzify_res(self, x):
         tooshort = self.resultdef['tooshort'](x)
@@ -77,7 +74,6 @@ class Fuzzy_food_control:
         tcdegrees = transmisiin(c=self.c)
         return {'temp':tempdegress, 'volume':voldegrees, 'transmision':tcdegrees}
 
-    
     def matching(self, degrees):
         membership_rules = {'tooshort':[], 'short':[], 'medium':[], 'long':[], 'toolong':[]}
 
@@ -191,32 +187,32 @@ class Fuzzy_food_control:
 
         return membership_rules
     
-
     def inference(self, membership_rules:dict):
         fuzzy_sets = list(membership_rules.keys())
         fuzzy_output ={}
         for f_set in fuzzy_sets:
             if membership_rules[f_set] != []:
                 fuzzy_output[f_set] = max(membership_rules[f_set])
+            else:
+                fuzzy_output[f_set] = 0
 
         return fuzzy_output
-
 
     def defuzzify(self, fuzzy_output):
         
         def COG(X, f_output):
             membership_degrees = []
             for x in X:
-                f_sets = list(f_output.keys())
                 f_var = self.fuzzify_res(x)
-                for key in f_sets:
-                    md = max(f_output[key], f_var[key])
-                    membership_degrees.append(md)
-
+                md = max(min(f_output['tooshort'], f_var['tooshort']), min(f_output['short'], f_var['short']),
+                         min(f_output['medium'], f_var['medium']),min(f_output['long'], f_var['long']),
+                         min(f_output['toolong'], f_var['toolong']))
+                membership_degrees.append(md)
             membership_degrees = np.array(membership_degrees)
+
             cog = np.dot(membership_degrees, X) / np.sum(membership_degrees)
 
             return cog
 
-        X = np.arange(0,100,1e-4)
+        X = np.arange(0,100,2) # change this later
         return COG(X, fuzzy_output)
