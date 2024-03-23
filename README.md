@@ -1,14 +1,32 @@
-# Soft Computing Course HomeWorks
-#### University: Shahid Bahonar University of Kerman
+# Soft Computing Course HomeWorks 
+### University: Shahid Bahonar University of Kerman
 #### Date: Fall 2023
 
 
-#### Team: 
-<ul>
-    <li> Amirhossein Abolhasani </li>
-    <li> Hamidreza Bazyar</li>
-    <li> Sadra Kochakzade</li>
-</ul>
+## Team: 
+- [**Amirhossein Abolhasani**](https://github.com/AmirAAZ818)
+- [**Hamidreza Bazyar**](https://github.com/hamidbz)
+- [**Sadra Koocheckzadeh**](https://github.com/Sadrakch)
+
+## What will you find here?
+- ### Binary Genetic Algorithm
+  - #### Implementation
+    - `main.py` : Driver code
+    - `BGA_Class.py` : Binary genetic algorithm's logic and operations are implemented in this file.
+    - `test_functions.py`: Test functions for evaluating the algorithm and tuning the parameters.
+  - #### Documentation
+  <hr>
+- ### Real Genetic Algorithm Implementation
+  <hr>
+- ### A Fuzzy Controller on Genetic Algorithm Implementation
+  <hr>
+- ### Gravitational Search Algorithm
+  <hr>
+
+
+
+
+
 
 
 ## Notes
