@@ -34,6 +34,13 @@
   - #### Note: Based on [**Gravitational Search Algorithm**](https://doi.org/10.1016/j.ins.2009.03.004) Paper
 <hr>
 
+## Package Installation
+To install the required packages, run:
+```bash
+pip install -r requirements.txt
+```
+<hr>
+
 ## Notes
 <ul>
 <li>Please when merging your branch with the main branch, make a pull request first and wait for at least one teammate's agreement. (This suggestion only applies to merging with the main branch, so feel free to do whatever you want with other branches :) )</li>
