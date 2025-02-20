@@ -8,20 +8,17 @@
 - [**Sadra**](https://github.com/Sadrakch)
 
 ## What will you find here?
-- ### Binary Genetic Algorithm
-  - #### Implementation
+- ### Binary Genetic Algorithm's Implementation
     - `main.py` : Driver code
     - `BGA_Class.py` : Binary genetic algorithm's logic and operations are implemented in this file.
     - `test_functions.py`: Test functions for evaluating the algorithm and tuning the parameters.
-  - #### Documentation
-  - 
   <hr>
-- ### Real Genetic Algorithm Implementation
+- ### Real (Valued) Genetic Algorithm's Implementation
 - 
   <hr>
-- ### A Fuzzy Controller on Genetic Algorithm Implementation
+- ### A Fuzzy Controller on Genetic Algorithm's Implementation
   <hr>
-- ### Gravitational Search Algorithm
+- ### Gravitational Search Algorithm's Implementation
   <hr>
 
 
