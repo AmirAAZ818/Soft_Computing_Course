@@ -1,7 +1,7 @@
 from random import randint, random
 import math
 import matplotlib.pyplot as plt
-from tqdm import tqdm, trange
+from tqdm import trange
 from tabulate import tabulate
 import os
 
@@ -89,7 +89,7 @@ class BGA:
             2. Optimum value found for the target function
         """
 
-        # Evaluating best solution
+        # Evaluating the best solution
         mean_best_solutions = [0 for i in range(self.dim)]
 
         for i in range(self.dim):
@@ -286,7 +286,7 @@ class BGA:
         return tuple(decoded_values)
 
     def Crossover(self, mating_pool_mat):
-        """input: selected choros for parents / output: a matrix of children
+        """input: selected chromosomes for parents / output: a matrix of children
         this function gets parent matrix (selected parents for making child)
         and after cross over returns child matrix """
 

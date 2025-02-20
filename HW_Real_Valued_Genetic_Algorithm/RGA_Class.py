@@ -1,6 +1,6 @@
 from random import random, uniform, gauss
 import matplotlib.pyplot as plt
-from tqdm import tqdm, trange
+from tqdm import trange
 from tabulate import tabulate
 import os
 

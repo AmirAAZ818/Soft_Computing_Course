@@ -3,6 +3,7 @@ import random
 import math
 from tabulate import tabulate
 
+
 class GSA:
 
     def __init__(self, function, domain, function_dim, pop_size, ittration, k, G, a, runs, minimize=True):
@@ -20,10 +21,11 @@ class GSA:
         self.mess = [1 for _ in range(self.population_size)]
         self.accelerate = [[0 for _ in range(self.dim)] for _ in range(self.population_size)]
         self.velacity = [[0 for _ in range(self.dim)] for _ in range(self.population_size)]
-        self.forces = [[0 for _ in range(self.dim)] for _ in range(self.population_size)] # matrix of forces, value of [i][j] means force of the agent i in the j diminstion 
+        self.forces = [[0 for _ in range(self.dim)] for _ in range(
+            self.population_size)]  # matrix of forces, value of [i][j] means force of the agent i in the j diminution
         self.K = k
-        self.posations = self.initial_posations() # matrix of posation
-        self.fits = [0 for _ in  range(self.population_size)]
+        self.posations = self.initial_posations()  # matrix of position
+        self.fits = [0 for _ in range(self.population_size)]
         self.best = 0
         self.worst = 0
         self.bests = []
@@ -32,9 +34,9 @@ class GSA:
         self.avg_fits_of_runs = []
         self.best_position = None
         self.best_positions = []
-        self.total_best=[self.bound[0]['high'], self.best_position]
+        self.total_best = [self.bound[0]['high'], self.best_position]
 
-    # this method creats a random matrix (size population size x dim) and return the matrix
+    # this method creates a random matrix (size population size x dim) and return the matrix
     def initial_posations(self):
         agents = []
         for _ in range(self.population_size):
@@ -45,7 +47,6 @@ class GSA:
                 agent.append(random.uniform(l_bound, u_bound))
             agents.append(agent)
         return agents
-    
 
     def run(self):
         self.print_parameters()
@@ -58,7 +59,7 @@ class GSA:
         print(f'Best Position : {self.total_best[1]}')
         self.plot()
 
-    # this method, calls methods for each step of algorithm for itters time.
+    # this method, calls methods for each step of the algorithm for itters time.
     def one_run(self):
         for i in range(self.itters):
             self.t = i
@@ -70,20 +71,20 @@ class GSA:
             self.calculate_position()
             self.update_mess()
             self.log_one_run()
-            
+
     def get_fitness(self):
         for i in range(self.population_size):
             x = self.function(self.posations[i])
             self.fits[i] = x
-    
-    # calculates the distanse of 2 messes. inputs : mess1 & mess2 - output: distance(a float number)
+
+    # calculates the distance of two messes. inputs: mess1 & mess2 - output: distance(a float number)
     def distance(self, m1, m2):
         r = 0
         for i in range(self.dim):
             r += ((self.posations[m1][i] - self.posations[m2][i]) ** 2)
         return r ** 0.5
 
-    # this function is the implemantation of force furmola 
+    # this function is the implementation of force formula
     def calculate_force(self):
         fits = self.fits.copy()
         kbests = []
@@ -104,15 +105,15 @@ class GSA:
                 f = 0
                 totalforce = 0
                 for k in kbests:
-                    if k == i :
+                    if k == i:
                         totalforce = 0
                     else:
                         r = self.distance(i, k)
-                        f = (self.G * ((self.mess[i] * self.mess[k]) / (r + 0.001)) * 
-                              (self.posations[k][j] - self.posations[i][j]))
+                        f = (self.G * ((self.mess[i] * self.mess[k]) / (r + 0.001)) *
+                             (self.posations[k][j] - self.posations[i][j]))
                         totalforce = totalforce + random.random() * f
-                self.forces[i][j]= totalforce
-    
+                self.forces[i][j] = totalforce
+
     def calculate_accelerate(self):
         for i in range(self.population_size):
             if self.mess[i] == 0:
@@ -124,7 +125,7 @@ class GSA:
         for i in range(self.population_size):
             for j in range(self.dim):
                 self.velacity[i][j] = random.random() * self.velacity[i][j] + self.accelerate[i][j]
-    
+
     def calculate_position(self):
         for i in range(self.population_size):
             for j in range(self.dim):
@@ -134,10 +135,9 @@ class GSA:
                 # if self.posations[i][j] > self.bound[j]['high']:
                 #     self.posations[i][j] = self.bound[j]['high']
                 x = self.posations[i][j] + self.velacity[i][j]
-                self.posations[i][j] = x if (x < self.bound[j]['high'] and x > self.bound[j]['low']) else self.posations[i][j]
-                
+                self.posations[i][j] = x if (self.bound[j]['high'] > x > self.bound[j]['low']) else \
+                    self.posations[i][j]
 
-    
     def update_mess(self):
         q = [0 for _ in range(self.population_size)]
         for i in range(self.population_size):
@@ -146,8 +146,6 @@ class GSA:
         for i in range(self.population_size):
             self.mess[i] = q[i] / s
 
-
-    
     def update(self):
         self.G = self.G0 * (math.exp(-self.a * (self.t / self.itters)))
 
@@ -168,10 +166,9 @@ class GSA:
                 self.total_best[0] = self.best
                 self.total_best[1] = self.best_position
 
-
     def log_one_run(self):
         self.bests.append(self.best)
-        self.avg_fits.append( sum(self.fits) / self.population_size)
+        self.avg_fits.append(sum(self.fits) / self.population_size)
 
     def log_algo(self):
         self.best_of_runs.append(self.bests)
@@ -205,10 +202,9 @@ class GSA:
         ]
         print(tabulate(parameters, headers=["Parameter", "Value"], tablefmt="fancy_grid"))
 
-
     def plot(self):
-        
-        def get_avg(mat,n, m):
+
+        def get_avg(mat, n, m):
             res = []
             for i in range(m):
                 s = 0
@@ -228,4 +224,3 @@ class GSA:
 
         plt.legend()
         plt.show()
-
